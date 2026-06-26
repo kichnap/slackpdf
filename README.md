@@ -2,10 +2,10 @@
   <h1>SlackPDF</h1>
   <p>Fast, free, open-source PDF toolkit for Windows</p>
 
-  [![Build](https://github.com/<owner>/slackpdf/actions/workflows/build.yml/badge.svg)](https://github.com/<owner>/slackpdf/actions)
+  [![Build](https://github.com/ÂÀØ_USERNAME/slackpdf/actions/workflows/build.yml/badge.svg)](https://github.com/ÂÀØ_USERNAME/slackpdf/actions)
   [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-  [![Release](https://img.shields.io/github/v/release/<owner>/slackpdf)](https://github.com/<owner>/slackpdf/releases/latest)
-  [![Downloads](https://img.shields.io/github/downloads/<owner>/slackpdf/total)](https://github.com/<owner>/slackpdf/releases)
+  [![Release](https://img.shields.io/github/v/release/ÂÀØ_USERNAME/slackpdf)](https://github.com/ÂÀØ_USERNAME/slackpdf/releases/latest)
+  [![Downloads](https://img.shields.io/github/downloads/ÂÀØ_USERNAME/slackpdf/total)](https://github.com/ÂÀØ_USERNAME/slackpdf/releases)
 
   **[ğŸ‡·ğŸ‡º Ğ§Ğ¸Ñ‚Ğ°Ñ‚ÑŒ Ğ½Ğ° Ñ€ÑƒÑÑĞºĞ¾Ğ¼](README.ru.md)**
 </div>
@@ -26,7 +26,7 @@
 
 ## Download
 
-ğŸ‘‰ **[Latest release](https://github.com/<owner>/slackpdf/releases/latest)** â€” download `SlackPDF-Setup-x.x.x.exe`
+ğŸ‘‰ **[Latest release](https://github.com/ÂÀØ_USERNAME/slackpdf/releases/latest)** â€” download `SlackPDF-Setup-x.x.x.exe`
 
 Windows 10 / 11 x64. No .NET installation required (self-contained).
 
@@ -35,7 +35,7 @@ Windows 10 / 11 x64. No .NET installation required (self-contained).
 **Requirements:** [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0), Windows 10/11 x64
 
 ```bash
-git clone https://github.com/<owner>/slackpdf.git
+git clone https://github.com/ÂÀØ_USERNAME/slackpdf.git
 cd slackpdf
 dotnet restore
 ```

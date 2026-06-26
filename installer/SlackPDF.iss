@@ -1,7 +1,7 @@
 #define AppName "SlackPDF"
 #define AppVersion "1.0.0"
 #define AppPublisher "SlackPDF Contributors"
-#define AppURL "https://github.com/<owner>/slackpdf"
+#define AppURL "https://github.com/ÂÀØ_USERNAME/slackpdf"
 #define AppExeName "SlackPDF.exe"
 
 [Setup]
