@@ -1,0 +1,148 @@
+<UserControl x:Class="SlackPDF.Views.MergeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:SlackPDF.ViewModels">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+
+            <TextBlock Text="{DynamicResource Merge.Title}"
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       Margin="0,0,0,16"/>
+
+            <!-- File list -->
+            <materialDesign:Card Padding="0" Margin="0,0,0,16">
+                <DockPanel>
+                    <ToolBar DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignToolBar}">
+                        <Button Content="{DynamicResource Common.AddFiles}"
+                                Command="{Binding AddFilesCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"/>
+                        <Button Content="{DynamicResource Common.ClearAll}"
+                                Command="{Binding ClearAllCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"/>
+                    </ToolBar>
+
+                    <DataGrid ItemsSource="{Binding Files}"
+                              SelectedItem="{Binding SelectedFile}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              IsReadOnly="False"
+                              MinHeight="160" MaxHeight="300"
+                              materialDesign:DataGridAssist.CellPadding="8 4"
+                              AllowDrop="True">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="File" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FilePdfBox"
+                                                                     Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                                     VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                            <TextBlock Text="{Binding FileName}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Pages" Binding="{Binding PageCount}" Width="60" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Size"  Binding="{Binding FileSizeFormatted}" Width="80" IsReadOnly="True"/>
+                            <DataGridTemplateColumn Header="{DynamicResource Common.PageSelection}" Width="160">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type vm:MergeViewModel}">
+                                        <TextBox Text="{Binding Selection, Mode=OneWay}"
+                                                 materialDesign:HintAssist.Hint="{DynamicResource Common.PageSelectionHint}"
+                                                 Style="{StaticResource MaterialDesignTextBox}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                    Command="{Binding DataContext.MoveUpCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="Move up" Width="28" Height="28">
+                                                <materialDesign:PackIcon Kind="ArrowUp" Width="16" Height="16"/>
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                    Command="{Binding DataContext.MoveDownCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="Move down" Width="28" Height="28">
+                                                <materialDesign:PackIcon Kind="ArrowDown" Width="16" Height="16"/>
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                    Command="{Binding DataContext.RemoveFileCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="Remove" Width="28" Height="28"
+                                                    Foreground="{DynamicResource MaterialDesignBodyLight}">
+                                                <materialDesign:PackIcon Kind="Delete" Width="16" Height="16"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </materialDesign:Card>
+
+            <!-- Options -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox Grid.Column="0" Margin="0,0,16,0"
+                              materialDesign:HintAssist.Hint="{DynamicResource Merge.Bookmarks}"
+                              ItemsSource="{Binding BookmarkOptions}"
+                              SelectedItem="{Binding SelectedBookmarks}"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+
+                    <ComboBox Grid.Column="1" Margin="0,0,16,0"
+                              materialDesign:HintAssist.Hint="{DynamicResource Merge.AcroForms}"
+                              ItemsSource="{Binding AcroFormOptions}"
+                              SelectedItem="{Binding SelectedAcroForms}"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+
+                    <CheckBox Grid.Column="2"
+                              Content="{DynamicResource Merge.TOC}"
+                              IsChecked="{Binding AddTableOfContents}"
+                              Style="{StaticResource MaterialDesignCheckBox}"/>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Output -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0"
+                             Text="{Binding OutputPath}"
+                             materialDesign:HintAssist.Hint="{DynamicResource Common.OutputFile}"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             IsReadOnly="True" Margin="0,0,8,0"/>
+                    <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
+                            Command="{Binding BrowseOutputCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            VerticalAlignment="Bottom"/>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Run button -->
+            <Button Content="{DynamicResource Common.Run}"
+                    Command="{Binding RunCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    HorizontalAlignment="Left"
+                    Padding="32,8"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

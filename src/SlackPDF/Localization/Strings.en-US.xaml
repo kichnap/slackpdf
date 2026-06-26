@@ -1,0 +1,116 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+  <!-- Navigation -->
+  <sys:String x:Key="Nav.Merge">Merge</sys:String>
+  <sys:String x:Key="Nav.Split">Split</sys:String>
+  <sys:String x:Key="Nav.Mix">Mix</sys:String>
+  <sys:String x:Key="Nav.Rotate">Rotate</sys:String>
+  <sys:String x:Key="Nav.Extract">Extract</sys:String>
+  <sys:String x:Key="Nav.Insert">Insert</sys:String>
+  <sys:String x:Key="Nav.Composer">Composer</sys:String>
+  <sys:String x:Key="Nav.Settings">Settings</sys:String>
+
+  <!-- Common -->
+  <sys:String x:Key="Common.AddFiles">Add files</sys:String>
+  <sys:String x:Key="Common.ClearAll">Clear all</sys:String>
+  <sys:String x:Key="Common.Browse">Browse…</sys:String>
+  <sys:String x:Key="Common.Run">Run</sys:String>
+  <sys:String x:Key="Common.Cancel">Cancel</sys:String>
+  <sys:String x:Key="Common.OutputFile">Output file</sys:String>
+  <sys:String x:Key="Common.PageSelection">Page selection</sys:String>
+  <sys:String x:Key="Common.PageSelectionHint">e.g. 1-10, 14, 25-</sys:String>
+  <sys:String x:Key="Common.Success">Done! Saved to {0}</sys:String>
+  <sys:String x:Key="Common.Error">Error: {0}</sys:String>
+  <sys:String x:Key="Common.Pages">pages</sys:String>
+  <sys:String x:Key="Common.DropFilesHere">Drop PDF files here or click Add files</sys:String>
+
+  <!-- Merge -->
+  <sys:String x:Key="Merge.Title">Merge PDF files</sys:String>
+  <sys:String x:Key="Merge.Bookmarks">Bookmarks</sys:String>
+  <sys:String x:Key="Merge.Bookmarks.Merge">Merge</sys:String>
+  <sys:String x:Key="Merge.Bookmarks.Discard">Discard</sys:String>
+  <sys:String x:Key="Merge.Bookmarks.OneEntry">One entry per file</sys:String>
+  <sys:String x:Key="Merge.AcroForms">AcroForms</sys:String>
+  <sys:String x:Key="Merge.AcroForms.Discard">Discard</sys:String>
+  <sys:String x:Key="Merge.AcroForms.Merge">Merge</sys:String>
+  <sys:String x:Key="Merge.AcroForms.MergeRename">Merge with renamed fields</sys:String>
+  <sys:String x:Key="Merge.TOC">Add table of contents</sys:String>
+
+  <!-- Split -->
+  <sys:String x:Key="Split.Title">Split PDF</sys:String>
+  <sys:String x:Key="Split.EveryPage">After every page</sys:String>
+  <sys:String x:Key="Split.EveryNPages">Every N pages</sys:String>
+  <sys:String x:Key="Split.AtPages">At page numbers</sys:String>
+  <sys:String x:Key="Split.BySize">By file size (MB)</sys:String>
+  <sys:String x:Key="Split.ByBookmarks">By bookmarks level</sys:String>
+  <sys:String x:Key="Split.EvenOdd">Even / Odd pages</sys:String>
+  <sys:String x:Key="Split.OutputFolder">Output folder</sys:String>
+  <sys:String x:Key="Split.Prefix">File name prefix</sys:String>
+  <sys:String x:Key="Split.NPages">Pages per file</sys:String>
+  <sys:String x:Key="Split.AtPagesHint">e.g. 5, 10, 15</sys:String>
+
+  <!-- Mix -->
+  <sys:String x:Key="Mix.Title">Mix PDF pages</sys:String>
+  <sys:String x:Key="Mix.Straight">Straight order</sys:String>
+  <sys:String x:Key="Mix.Reverse">Reverse order</sys:String>
+  <sys:String x:Key="Mix.Description">Interleave pages from two or more PDFs. Perfect for single-sided scans.</sys:String>
+
+  <!-- Rotate -->
+  <sys:String x:Key="Rotate.Title">Rotate pages</sys:String>
+  <sys:String x:Key="Rotate.Angle">Rotation angle</sys:String>
+  <sys:String x:Key="Rotate.AllPages">All pages</sys:String>
+  <sys:String x:Key="Rotate.EvenPages">Even pages</sys:String>
+  <sys:String x:Key="Rotate.OddPages">Odd pages</sys:String>
+  <sys:String x:Key="Rotate.Selection">Page selection</sys:String>
+  <sys:String x:Key="Rotate.Overwrite">Overwrite original</sys:String>
+  <sys:String x:Key="Rotate.OverwriteWarning">Warning: this will replace the original file!</sys:String>
+
+  <!-- Extract -->
+  <sys:String x:Key="Extract.Title">Extract pages</sys:String>
+  <sys:String x:Key="Extract.SingleFile">Single output file</sys:String>
+  <sys:String x:Key="Extract.OnePerPage">One file per page</sys:String>
+  <sys:String x:Key="Extract.OnePerRange">One file per range</sys:String>
+  <sys:String x:Key="Extract.OutputMode">Output mode</sys:String>
+
+  <!-- Insert -->
+  <sys:String x:Key="Insert.Title">Insert pages</sys:String>
+  <sys:String x:Key="Insert.BaseDoc">Base document</sys:String>
+  <sys:String x:Key="Insert.InsertDoc">Document to insert</sys:String>
+  <sys:String x:Key="Insert.AtPosition">At position</sys:String>
+  <sys:String x:Key="Insert.EveryNPages">Every N pages</sys:String>
+  <sys:String x:Key="Insert.AfterEvery">After every page</sys:String>
+  <sys:String x:Key="Insert.Position">Position</sys:String>
+  <sys:String x:Key="Insert.InsertMode">Insert mode</sys:String>
+
+  <!-- Composer -->
+  <sys:String x:Key="Composer.Title">Visual Composer</sys:String>
+  <sys:String x:Key="Composer.AddDocument">Add document</sys:String>
+  <sys:String x:Key="Composer.DropHere">Drop pages here to build your document</sys:String>
+  <sys:String x:Key="Composer.ClearConfirm">Clear all pages from the assembly?</sys:String>
+  <sys:String x:Key="Composer.AutoOrder">Auto order</sys:String>
+  <sys:String x:Key="Composer.SavePdf">Save PDF</sys:String>
+  <sys:String x:Key="Composer.PageCount">{0} pages in assembly</sys:String>
+  <sys:String x:Key="Composer.DragHint">Drag pages here ↓</sys:String>
+  <sys:String x:Key="Composer.TooltipFmt">From: {0}, page {1} of {2}</sys:String>
+  <sys:String x:Key="Composer.Menu.Remove">Remove</sys:String>
+  <sys:String x:Key="Composer.Menu.MoveFirst">Move to start</sys:String>
+  <sys:String x:Key="Composer.Menu.MoveLast">Move to end</sys:String>
+  <sys:String x:Key="Composer.Menu.Duplicate">Duplicate</sys:String>
+  <sys:String x:Key="Composer.Sources">Source documents</sys:String>
+  <sys:String x:Key="Composer.Assembly">Document assembly</sys:String>
+
+  <!-- Settings -->
+  <sys:String x:Key="Settings.Title">Settings</sys:String>
+  <sys:String x:Key="Settings.Language">Interface language</sys:String>
+  <sys:String x:Key="Settings.Engine">PDF engine</sys:String>
+  <sys:String x:Key="Settings.Theme">Theme</sys:String>
+  <sys:String x:Key="Settings.Theme.Light">Light</sys:String>
+  <sys:String x:Key="Settings.Theme.Dark">Dark</sys:String>
+  <sys:String x:Key="Settings.ThumbnailCache">Thumbnail cache folder</sys:String>
+  <sys:String x:Key="Settings.ClearCache">Clear thumbnail cache</sys:String>
+  <sys:String x:Key="Settings.About">About SlackPDF</sys:String>
+  <sys:String x:Key="Settings.Version">Version 1.0.0 — GPL v3 — Free &amp; Open Source</sys:String>
+
+</ResourceDictionary>

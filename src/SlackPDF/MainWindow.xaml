@@ -1,0 +1,205 @@
+<Window x:Class="SlackPDF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:SlackPDF.ViewModels"
+        xmlns:views="clr-namespace:SlackPDF.Views"
+        mc:Ignorable="d"
+        Title="SlackPDF"
+        Height="700" Width="1100" MinHeight="600" MinWidth="900"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="72"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Navigation Rail -->
+        <Border Grid.Column="0" Grid.RowSpan="2"
+                Background="{DynamicResource PrimaryHueDarkBrush}">
+            <StackPanel VerticalAlignment="Top" Margin="0,16,0,0">
+
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        ToolTip="{DynamicResource Nav.Merge}"
+                        Command="{Binding NavigateCommand}" CommandParameter="Merge"
+                        Foreground="White" Width="72" Height="72">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="CallMerge" Width="24" Height="24"
+                                                 HorizontalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Nav.Merge}" FontSize="10"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        ToolTip="{DynamicResource Nav.Split}"
+                        Command="{Binding NavigateCommand}" CommandParameter="Split"
+                        Foreground="White" Width="72" Height="72">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="CallSplit" Width="24" Height="24"
+                                                 HorizontalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Nav.Split}" FontSize="10"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        ToolTip="{DynamicResource Nav.Mix}"
+                        Command="{Binding NavigateCommand}" CommandParameter="Mix"
+                        Foreground="White" Width="72" Height="72">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="Shuffle" Width="24" Height="24"
+                                                 HorizontalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Nav.Mix}" FontSize="10"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        ToolTip="{DynamicResource Nav.Rotate}"
+                        Command="{Binding NavigateCommand}" CommandParameter="Rotate"
+                        Foreground="White" Width="72" Height="72">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="RotateLeft" Width="24" Height="24"
+                                                 HorizontalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Nav.Rotate}" FontSize="10"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        ToolTip="{DynamicResource Nav.Extract}"
+                        Command="{Binding NavigateCommand}" CommandParameter="Extract"
+                        Foreground="White" Width="72" Height="72">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="ContentCut" Width="24" Height="24"
+                                                 HorizontalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Nav.Extract}" FontSize="10"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        ToolTip="{DynamicResource Nav.Insert}"
+                        Command="{Binding NavigateCommand}" CommandParameter="Insert"
+                        Foreground="White" Width="72" Height="72">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="InsertDriveFile" Width="24" Height="24"
+                                                 HorizontalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Nav.Insert}" FontSize="10"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        ToolTip="{DynamicResource Nav.Composer}"
+                        Command="{Binding NavigateCommand}" CommandParameter="Composer"
+                        Foreground="White" Width="72" Height="72">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="ViewGrid" Width="24" Height="24"
+                                                 HorizontalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Nav.Composer}" FontSize="10"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Separator Background="#44FFFFFF" Margin="8,8"/>
+
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        ToolTip="{DynamicResource Nav.Settings}"
+                        Command="{Binding NavigateCommand}" CommandParameter="Settings"
+                        Foreground="White" Width="72" Height="72">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="Settings" Width="24" Height="24"
+                                                 HorizontalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Nav.Settings}" FontSize="10"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
+        </Border>
+
+        <!-- Content Area -->
+        <ContentControl Grid.Column="1" Grid.Row="0"
+                        Content="{Binding CurrentView}"
+                        Margin="0">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type vm:MergeViewModel}">
+                    <views:MergeView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:SplitViewModel}">
+                    <views:SplitView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:MixViewModel}">
+                    <views:MixView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:RotateViewModel}">
+                    <views:RotateView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:ExtractViewModel}">
+                    <views:ExtractView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:InsertViewModel}">
+                    <views:InsertView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:ComposerViewModel}">
+                    <views:ComposerView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+                    <views:SettingsView/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+
+        <!-- Status Bar -->
+        <Border Grid.Column="1" Grid.Row="1"
+                Background="{DynamicResource MaterialDesignToolBarBackground}"
+                BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource MaterialDesignDivider}"
+                Padding="16,4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{Binding CurrentView.StatusMessage}"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           Opacity="0.8"/>
+
+                <ProgressBar Grid.Column="1"
+                             Value="{Binding CurrentView.Progress}"
+                             Height="4"
+                             Margin="16,0"
+                             Visibility="{Binding CurrentView.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                             Style="{StaticResource MaterialDesignLinearProgressBar}"/>
+
+                <TextBlock Grid.Column="2"
+                           Text="{Binding ActiveEngineName, StringFormat='Engine: {0}'}"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           Opacity="0.6"/>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>

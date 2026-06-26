@@ -1,0 +1,116 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+  <!-- Навигация -->
+  <sys:String x:Key="Nav.Merge">Объединить</sys:String>
+  <sys:String x:Key="Nav.Split">Разделить</sys:String>
+  <sys:String x:Key="Nav.Mix">Чередование</sys:String>
+  <sys:String x:Key="Nav.Rotate">Поворот</sys:String>
+  <sys:String x:Key="Nav.Extract">Извлечь</sys:String>
+  <sys:String x:Key="Nav.Insert">Вставить</sys:String>
+  <sys:String x:Key="Nav.Composer">Сборщик</sys:String>
+  <sys:String x:Key="Nav.Settings">Настройки</sys:String>
+
+  <!-- Общее -->
+  <sys:String x:Key="Common.AddFiles">Добавить файлы</sys:String>
+  <sys:String x:Key="Common.ClearAll">Очистить всё</sys:String>
+  <sys:String x:Key="Common.Browse">Обзор…</sys:String>
+  <sys:String x:Key="Common.Run">Выполнить</sys:String>
+  <sys:String x:Key="Common.Cancel">Отмена</sys:String>
+  <sys:String x:Key="Common.OutputFile">Выходной файл</sys:String>
+  <sys:String x:Key="Common.PageSelection">Выбор страниц</sys:String>
+  <sys:String x:Key="Common.PageSelectionHint">напр. 1-10, 14, 25-</sys:String>
+  <sys:String x:Key="Common.Success">Готово! Сохранено: {0}</sys:String>
+  <sys:String x:Key="Common.Error">Ошибка: {0}</sys:String>
+  <sys:String x:Key="Common.Pages">стр.</sys:String>
+  <sys:String x:Key="Common.DropFilesHere">Перетащи PDF-файлы сюда или нажми «Добавить файлы»</sys:String>
+
+  <!-- Объединение -->
+  <sys:String x:Key="Merge.Title">Объединить PDF</sys:String>
+  <sys:String x:Key="Merge.Bookmarks">Закладки</sys:String>
+  <sys:String x:Key="Merge.Bookmarks.Merge">Объединить</sys:String>
+  <sys:String x:Key="Merge.Bookmarks.Discard">Удалить</sys:String>
+  <sys:String x:Key="Merge.Bookmarks.OneEntry">По одной на файл</sys:String>
+  <sys:String x:Key="Merge.AcroForms">AcroForms</sys:String>
+  <sys:String x:Key="Merge.AcroForms.Discard">Удалить</sys:String>
+  <sys:String x:Key="Merge.AcroForms.Merge">Объединить</sys:String>
+  <sys:String x:Key="Merge.AcroForms.MergeRename">Объединить с переименованием</sys:String>
+  <sys:String x:Key="Merge.TOC">Добавить оглавление</sys:String>
+
+  <!-- Разбивка -->
+  <sys:String x:Key="Split.Title">Разделить PDF</sys:String>
+  <sys:String x:Key="Split.EveryPage">После каждой страницы</sys:String>
+  <sys:String x:Key="Split.EveryNPages">Каждые N страниц</sys:String>
+  <sys:String x:Key="Split.AtPages">По номерам страниц</sys:String>
+  <sys:String x:Key="Split.BySize">По размеру файла (МБ)</sys:String>
+  <sys:String x:Key="Split.ByBookmarks">По уровню закладок</sys:String>
+  <sys:String x:Key="Split.EvenOdd">Чётные / нечётные</sys:String>
+  <sys:String x:Key="Split.OutputFolder">Папка вывода</sys:String>
+  <sys:String x:Key="Split.Prefix">Префикс имени файла</sys:String>
+  <sys:String x:Key="Split.NPages">Страниц в файле</sys:String>
+  <sys:String x:Key="Split.AtPagesHint">напр. 5, 10, 15</sys:String>
+
+  <!-- Чередование -->
+  <sys:String x:Key="Mix.Title">Чередование страниц</sys:String>
+  <sys:String x:Key="Mix.Straight">Прямой порядок</sys:String>
+  <sys:String x:Key="Mix.Reverse">Обратный порядок</sys:String>
+  <sys:String x:Key="Mix.Description">Чередует страницы из нескольких PDF. Идеально для односторонних сканов.</sys:String>
+
+  <!-- Поворот -->
+  <sys:String x:Key="Rotate.Title">Повернуть страницы</sys:String>
+  <sys:String x:Key="Rotate.Angle">Угол поворота</sys:String>
+  <sys:String x:Key="Rotate.AllPages">Все страницы</sys:String>
+  <sys:String x:Key="Rotate.EvenPages">Чётные</sys:String>
+  <sys:String x:Key="Rotate.OddPages">Нечётные</sys:String>
+  <sys:String x:Key="Rotate.Selection">Выбор страниц</sys:String>
+  <sys:String x:Key="Rotate.Overwrite">Перезаписать оригинал</sys:String>
+  <sys:String x:Key="Rotate.OverwriteWarning">Внимание: оригинальный файл будет заменён!</sys:String>
+
+  <!-- Извлечение -->
+  <sys:String x:Key="Extract.Title">Извлечь страницы</sys:String>
+  <sys:String x:Key="Extract.SingleFile">Один выходной файл</sys:String>
+  <sys:String x:Key="Extract.OnePerPage">По файлу на страницу</sys:String>
+  <sys:String x:Key="Extract.OnePerRange">По файлу на диапазон</sys:String>
+  <sys:String x:Key="Extract.OutputMode">Режим вывода</sys:String>
+
+  <!-- Вставка -->
+  <sys:String x:Key="Insert.Title">Вставить страницы</sys:String>
+  <sys:String x:Key="Insert.BaseDoc">Основной документ</sys:String>
+  <sys:String x:Key="Insert.InsertDoc">Вставляемый документ</sys:String>
+  <sys:String x:Key="Insert.AtPosition">В позицию</sys:String>
+  <sys:String x:Key="Insert.EveryNPages">Каждые N страниц</sys:String>
+  <sys:String x:Key="Insert.AfterEvery">После каждой страницы</sys:String>
+  <sys:String x:Key="Insert.Position">Позиция</sys:String>
+  <sys:String x:Key="Insert.InsertMode">Режим вставки</sys:String>
+
+  <!-- Сборщик -->
+  <sys:String x:Key="Composer.Title">Визуальный сборщик</sys:String>
+  <sys:String x:Key="Composer.AddDocument">Добавить документ</sys:String>
+  <sys:String x:Key="Composer.DropHere">Перетащи страницы сюда для сборки документа</sys:String>
+  <sys:String x:Key="Composer.ClearConfirm">Очистить все страницы из сборки?</sys:String>
+  <sys:String x:Key="Composer.AutoOrder">Авто-порядок</sys:String>
+  <sys:String x:Key="Composer.SavePdf">Сохранить PDF</sys:String>
+  <sys:String x:Key="Composer.PageCount">{0} стр. в сборке</sys:String>
+  <sys:String x:Key="Composer.DragHint">Перетащи страницы вниз ↓</sys:String>
+  <sys:String x:Key="Composer.TooltipFmt">Из: {0}, стр. {1} из {2}</sys:String>
+  <sys:String x:Key="Composer.Menu.Remove">Убрать</sys:String>
+  <sys:String x:Key="Composer.Menu.MoveFirst">В начало</sys:String>
+  <sys:String x:Key="Composer.Menu.MoveLast">В конец</sys:String>
+  <sys:String x:Key="Composer.Menu.Duplicate">Дублировать</sys:String>
+  <sys:String x:Key="Composer.Sources">Исходные документы</sys:String>
+  <sys:String x:Key="Composer.Assembly">Сборка документа</sys:String>
+
+  <!-- Настройки -->
+  <sys:String x:Key="Settings.Title">Настройки</sys:String>
+  <sys:String x:Key="Settings.Language">Язык интерфейса</sys:String>
+  <sys:String x:Key="Settings.Engine">Движок PDF</sys:String>
+  <sys:String x:Key="Settings.Theme">Тема</sys:String>
+  <sys:String x:Key="Settings.Theme.Light">Светлая</sys:String>
+  <sys:String x:Key="Settings.Theme.Dark">Тёмная</sys:String>
+  <sys:String x:Key="Settings.ThumbnailCache">Папка кэша миниатюр</sys:String>
+  <sys:String x:Key="Settings.ClearCache">Очистить кэш миниатюр</sys:String>
+  <sys:String x:Key="Settings.About">О программе SlackPDF</sys:String>
+  <sys:String x:Key="Settings.Version">Версия 1.0.0 — GPL v3 — Бесплатно и открыто</sys:String>
+
+</ResourceDictionary>

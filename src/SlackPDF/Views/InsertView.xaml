@@ -1,0 +1,110 @@
+<UserControl x:Class="SlackPDF.Views.InsertView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+
+            <TextBlock Text="{DynamicResource Insert.Title}"
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       Margin="0,0,0,16"/>
+
+            <!-- Base document -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                        <TextBox Text="{Binding BaseFileName}"
+                                 materialDesign:HintAssist.Hint="{DynamicResource Insert.BaseDoc}"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 IsReadOnly="True"/>
+                        <TextBlock Text="{Binding BasePageCount, StringFormat='Pages: {0}'}"
+                                   Opacity="0.6" FontSize="12" Margin="0,4,0,0"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
+                            Command="{Binding BrowseBaseCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Insert document -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                        <TextBox Text="{Binding InsertFileName}"
+                                 materialDesign:HintAssist.Hint="{DynamicResource Insert.InsertDoc}"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 IsReadOnly="True"/>
+                        <TextBox Text="{Binding InsertPageSelectionText}"
+                                 materialDesign:HintAssist.Hint="{DynamicResource Common.PageSelectionHint}"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="0,8,0,0"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
+                            Command="{Binding BrowseInsertCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Top"/>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Insert options -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Insert.InsertMode}"
+                               Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,4">
+                        <RadioButton Content="{DynamicResource Insert.AtPosition}"
+                                     IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=AtPosition}"
+                                     Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Position}" Width="60" Margin="16,0,0,0"
+                                 Style="{StaticResource MaterialDesignTextBox}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,4">
+                        <RadioButton Content="{DynamicResource Insert.EveryNPages}"
+                                     IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=EveryNPages}"
+                                     Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Position}" Width="60" Margin="16,0,0,0"
+                                 Style="{StaticResource MaterialDesignTextBox}"/>
+                    </StackPanel>
+
+                    <RadioButton Content="{DynamicResource Insert.AfterEvery}"
+                                 IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=AfterEveryPage}"
+                                 Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Output -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Text="{Binding OutputPath}"
+                             materialDesign:HintAssist.Hint="{DynamicResource Common.OutputFile}"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             IsReadOnly="True" Margin="0,0,8,0"/>
+                    <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
+                            Command="{Binding BrowseOutputCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
+                </Grid>
+            </materialDesign:Card>
+
+            <Button Content="{DynamicResource Common.Run}"
+                    Command="{Binding RunCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    HorizontalAlignment="Left" Padding="32,8"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

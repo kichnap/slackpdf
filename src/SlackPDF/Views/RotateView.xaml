@@ -1,0 +1,108 @@
+<UserControl x:Class="SlackPDF.Views.RotateView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+
+            <TextBlock Text="{DynamicResource Rotate.Title}"
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       Margin="0,0,0,16"/>
+
+            <!-- Input -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                        <TextBox Text="{Binding InputFileName}"
+                                 materialDesign:HintAssist.Hint="Input PDF file"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 IsReadOnly="True"/>
+                        <TextBlock Text="{Binding InputPageCount, StringFormat='Pages: {0}'}"
+                                   Margin="0,4,0,0" Opacity="0.6" FontSize="12"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
+                            Command="{Binding BrowseInputCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Angle -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Rotate.Angle}"
+                               Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Content="90°" IsChecked="{Binding SelectedAngle, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=90}"
+                                     Style="{StaticResource MaterialDesignRadioButton}" Margin="0,0,16,0"/>
+                        <RadioButton Content="180°" IsChecked="{Binding SelectedAngle, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=180}"
+                                     Style="{StaticResource MaterialDesignRadioButton}" Margin="0,0,16,0"/>
+                        <RadioButton Content="270°" IsChecked="{Binding SelectedAngle, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=270}"
+                                     Style="{StaticResource MaterialDesignRadioButton}"/>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Page selection -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Apply to" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+                    <RadioButton Content="{DynamicResource Rotate.AllPages}"
+                                 IsChecked="{Binding PageSelectionMode, Converter={StaticResource StringEqualsToBoolConverter}, ConverterParameter=All}"
+                                 Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4"/>
+                    <RadioButton Content="{DynamicResource Rotate.EvenPages}"
+                                 IsChecked="{Binding PageSelectionMode, Converter={StaticResource StringEqualsToBoolConverter}, ConverterParameter=Even}"
+                                 Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4"/>
+                    <RadioButton Content="{DynamicResource Rotate.OddPages}"
+                                 IsChecked="{Binding PageSelectionMode, Converter={StaticResource StringEqualsToBoolConverter}, ConverterParameter=Odd}"
+                                 Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4"/>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Content="{DynamicResource Rotate.Selection}"
+                                     IsChecked="{Binding PageSelectionMode, Converter={StaticResource StringEqualsToBoolConverter}, ConverterParameter=Custom}"
+                                     Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding PageSelectionText}"
+                                 Width="200" Margin="16,0,0,0"
+                                 materialDesign:HintAssist.Hint="{DynamicResource Common.PageSelectionHint}"
+                                 Style="{StaticResource MaterialDesignTextBox}"/>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Output -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <CheckBox Content="{DynamicResource Rotate.Overwrite}"
+                              IsChecked="{Binding OverwriteOriginal}"
+                              Style="{StaticResource MaterialDesignCheckBox}" Margin="0,0,0,8"/>
+                    <TextBlock Text="{DynamicResource Rotate.OverwriteWarning}"
+                               Foreground="OrangeRed" FontSize="12"
+                               Visibility="{Binding OverwriteOriginal, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Grid Visibility="{Binding OverwriteOriginal, Converter={StaticResource InverseBoolToVisibilityConverter}}" Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding OutputPath}"
+                                 materialDesign:HintAssist.Hint="{DynamicResource Common.OutputFile}"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 IsReadOnly="True" Margin="0,0,8,0"/>
+                        <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
+                                Command="{Binding BrowseOutputCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
+                    </Grid>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <Button Content="{DynamicResource Common.Run}"
+                    Command="{Binding RunCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    HorizontalAlignment="Left" Padding="32,8"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

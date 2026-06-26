@@ -1,0 +1,109 @@
+<UserControl x:Class="SlackPDF.Views.SplitView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:models="clr-namespace:SlackPDF.Core.Models;assembly=SlackPDF">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+
+            <TextBlock Text="{DynamicResource Split.Title}"
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       Margin="0,0,0,16"/>
+
+            <!-- Input file -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                        <TextBox Text="{Binding InputFileName}"
+                                 materialDesign:HintAssist.Hint="Input PDF file"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 IsReadOnly="True"/>
+                        <TextBlock Text="{Binding InputPageCount, StringFormat='Pages: {0}'}"
+                                   Margin="0,4,0,0" Opacity="0.6" FontSize="12"
+                                   Visibility="{Binding InputPageCount, Converter={StaticResource IsNonZeroToVisibilityConverter}}"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
+                            Command="{Binding BrowseInputCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            VerticalAlignment="Bottom"/>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Split mode -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Split mode" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+
+                    <RadioButton Content="{DynamicResource Split.EveryPage}"
+                                 IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=EveryPage}"
+                                 Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Content="{DynamicResource Split.EveryNPages}"
+                                     IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=EveryNPages}"
+                                     Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding NPages}"
+                                 Width="60" Margin="16,0,0,0"
+                                 Style="{StaticResource MaterialDesignTextBox}"
+                                 VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Content="{DynamicResource Split.AtPages}"
+                                     IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=AtPages}"
+                                     Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding AtPagesText}"
+                                 Width="200" Margin="16,0,0,0"
+                                 materialDesign:HintAssist.Hint="{DynamicResource Split.AtPagesHint}"
+                                 Style="{StaticResource MaterialDesignTextBox}"
+                                 VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <RadioButton Content="{DynamicResource Split.EvenOdd}"
+                                 IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=EvenOdd}"
+                                 Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4"/>
+
+                    <RadioButton Content="{DynamicResource Split.ByBookmarks}"
+                                 IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=ByBookmarks}"
+                                 Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Output -->
+            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding OutputFolder}"
+                                 materialDesign:HintAssist.Hint="{DynamicResource Split.OutputFolder}"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 IsReadOnly="True" Margin="0,0,8,0"/>
+                        <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
+                                Command="{Binding BrowseOutputFolderCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                VerticalAlignment="Bottom"/>
+                    </Grid>
+                    <TextBox Text="{Binding FileNamePrefix}"
+                             materialDesign:HintAssist.Hint="{DynamicResource Split.Prefix}"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <Button Content="{DynamicResource Common.Run}"
+                    Command="{Binding RunCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    HorizontalAlignment="Left" Padding="32,8"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

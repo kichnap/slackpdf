@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SlackPDF.Tests/SlackPDF.Tests.csproj" />
+    <Project Path="src/SlackPDF/SlackPDF.csproj" />
+  </Folder>
+</Solution>
