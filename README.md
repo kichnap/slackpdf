@@ -32,14 +32,71 @@ Windows 10 / 11 x64. No .NET installation required (self-contained).
 
 ## Build from source
 
+**Requirements:** [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0), Windows 10/11 x64
+
 ```bash
 git clone https://github.com/<owner>/slackpdf.git
 cd slackpdf
-dotnet build
+dotnet restore
+```
+
+### Run in development mode
+
+Starts the app directly without packaging. Fast iteration — no installer needed.
+
+```bash
 dotnet run --project src/SlackPDF
 ```
 
-Requirements: [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+### Build (debug)
+
+Compiles to `src/SlackPDF/bin/Debug/net9.0-windows/`. The `.exe` requires .NET 9 installed on the target machine.
+
+```bash
+dotnet build
+```
+
+### Build (release, framework-dependent)
+
+Smaller output, but requires .NET 9 to be installed on the target machine.
+
+```bash
+dotnet build --configuration Release
+```
+
+### Publish (self-contained single file) — for distribution
+
+Produces one standalone `SlackPDF.exe` in `publish/` that runs on any Windows 10/11 x64 machine without .NET installed.
+
+```bash
+dotnet publish src/SlackPDF/SlackPDF.csproj `
+  -c Release `
+  -r win-x64 `
+  --self-contained true `
+  -p:PublishSingleFile=true `
+  -o publish/
+```
+
+### Run tests
+
+```bash
+dotnet test
+```
+
+### Run benchmarks (PDFsharp vs iText)
+
+```bash
+dotnet run --project src/SlackPDF.Tests -c Release -- --filter "*Merge*"
+```
+
+### Build installer (requires [Inno Setup](https://jrsoftware.org/isinfo.php))
+
+First publish the self-contained build (see above), then:
+
+```bash
+iscc installer/SlackPDF.iss
+# Output: installer/Output/SlackPDF-Setup-1.0.0.exe
+```
 
 ## Why SlackPDF?
 

@@ -32,14 +32,71 @@ Windows 10 / 11 x64. Установка .NET не требуется (self-conta
 
 ## Сборка из исходников
 
+**Требования:** [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0), Windows 10/11 x64
+
 ```bash
 git clone https://github.com/<owner>/slackpdf.git
 cd slackpdf
-dotnet build
+dotnet restore
+```
+
+### Запуск в режиме разработки
+
+Запускает приложение напрямую без упаковки. Быстрая итерация — инсталлятор не нужен.
+
+```bash
 dotnet run --project src/SlackPDF
 ```
 
-Требования: [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+### Сборка (debug)
+
+Компилирует в `src/SlackPDF/bin/Debug/net9.0-windows/`. Для запуска `.exe` на целевой машине требуется установленный .NET 9.
+
+```bash
+dotnet build
+```
+
+### Сборка (release, framework-dependent)
+
+Меньше по размеру, но требует установленного .NET 9 на целевой машине.
+
+```bash
+dotnet build --configuration Release
+```
+
+### Публикация (self-contained, один файл) — для дистрибуции
+
+Создаёт один автономный `SlackPDF.exe` в папке `publish/`. Работает на любом Windows 10/11 x64 без установки .NET.
+
+```bash
+dotnet publish src/SlackPDF/SlackPDF.csproj `
+  -c Release `
+  -r win-x64 `
+  --self-contained true `
+  -p:PublishSingleFile=true `
+  -o publish/
+```
+
+### Запуск тестов
+
+```bash
+dotnet test
+```
+
+### Запуск бенчмарков (PDFsharp vs iText)
+
+```bash
+dotnet run --project src/SlackPDF.Tests -c Release -- --filter "*Merge*"
+```
+
+### Сборка инсталлятора (требует [Inno Setup](https://jrsoftware.org/isinfo.php))
+
+Сначала выполни публикацию (см. выше), затем:
+
+```bash
+iscc installer/SlackPDF.iss
+# Результат: installer/Output/SlackPDF-Setup-1.0.0.exe
+```
 
 ## Зачем SlackPDF?
 
