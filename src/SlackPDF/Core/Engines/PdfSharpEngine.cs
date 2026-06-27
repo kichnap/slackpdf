@@ -32,9 +32,10 @@ public class PdfSharpEngine : IPdfEngine
 
                     if (options.Bookmarks == BookmarkBehavior.OneEntryPerFile)
                     {
-                        var outline = output.Outlines.Add(
-                            Path.GetFileNameWithoutExtension(filePath),
-                            output.Pages.Count > 0 ? output.Pages[output.Pages.Count - 1] : null);
+                        if (output.Pages.Count > 0)
+                            output.Outlines.Add(
+                                Path.GetFileNameWithoutExtension(filePath),
+                                output.Pages[output.Pages.Count - 1]);
                     }
 
                     var pageNumbers = pages.Resolve(src.PageCount).ToList();
