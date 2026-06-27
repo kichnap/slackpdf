@@ -157,7 +157,7 @@
                                         </StackPanel>
 
                                         <!-- Selection overlay: semi-transparent fill + checkmark -->
-                                        <Border Background="#CC1A237E" CornerRadius="2"
+                                        <Border Background="#AD1A237E" CornerRadius="2"
                                                 Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <materialDesign:PackIcon Kind="Check" Width="28" Height="28"
                                                                      Foreground="White"
@@ -196,10 +196,12 @@
                     </DockPanel>
                 </Border>
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                <ScrollViewer x:Name="AssemblyScrollViewer"
+                              VerticalScrollBarVisibility="Auto"
                               AllowDrop="True"
                               DragOver="Assembly_DragOver"
-                              Drop="Assembly_Drop">
+                              Drop="Assembly_Drop"
+                              DragLeave="Assembly_DragLeave">
                     <ItemsControl ItemsSource="{Binding ComposedPages}"
                                   x:Name="AssemblyPanel">
                         <ItemsControl.ItemsPanel>

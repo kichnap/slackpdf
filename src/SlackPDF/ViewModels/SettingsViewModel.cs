@@ -15,6 +15,9 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private bool _isRussian;
     [ObservableProperty] private bool _isLightTheme = true;
     [ObservableProperty] private bool _isDarkTheme;
+    [ObservableProperty] private bool _postSaveNothing = true;
+    [ObservableProperty] private bool _postSaveOpenFolder;
+    [ObservableProperty] private bool _postSaveOpenFile;
     [ObservableProperty] private string _statusMessage = string.Empty;
 
     public SettingsViewModel(SlackPDF.Core.PdfOperations ops, ThumbnailService thumbs)
@@ -25,6 +28,9 @@ public partial class SettingsViewModel : ObservableObject
         IsRussian    = _settings.Language == "ru-RU";
         IsLightTheme = _settings.Theme != "Dark";
         IsDarkTheme  = _settings.Theme == "Dark";
+        PostSaveNothing    = _settings.PostSave == PostSaveAction.Nothing;
+        PostSaveOpenFolder = _settings.PostSave == PostSaveAction.OpenFolder;
+        PostSaveOpenFile   = _settings.PostSave == PostSaveAction.OpenFile;
     }
 
     [RelayCommand]
@@ -48,6 +54,17 @@ public partial class SettingsViewModel : ObservableObject
         SettingsService.Save(_settings);
         IsLightTheme = theme == "Light";
         IsDarkTheme  = theme == "Dark";
+    }
+
+    [RelayCommand]
+    private void SetPostSave(string value)
+    {
+        var action = Enum.Parse<PostSaveAction>(value);
+        _settings = _settings with { PostSave = action };
+        SettingsService.Save(_settings);
+        PostSaveNothing    = action == PostSaveAction.Nothing;
+        PostSaveOpenFolder = action == PostSaveAction.OpenFolder;
+        PostSaveOpenFile   = action == PostSaveAction.OpenFile;
     }
 
     [RelayCommand]

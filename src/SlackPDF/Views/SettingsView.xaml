@@ -4,114 +4,196 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="24" MaxWidth="600" HorizontalAlignment="Left">
+        <Grid Margin="24" MaxWidth="900" HorizontalAlignment="Left">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="260"/>
+                <ColumnDefinition Width="24"/>
+                <ColumnDefinition Width="*" MinWidth="260"/>
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{DynamicResource Settings.Title}"
+            <!-- Title spans both columns -->
+            <TextBlock Grid.Column="0" Grid.ColumnSpan="3"
+                       Text="{DynamicResource Settings.Title}"
                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                        Margin="0,0,0,24"/>
 
-            <!-- Language -->
-            <materialDesign:Card Padding="20" Margin="0,0,0,16">
-                <StackPanel>
-                    <TextBlock Text="{DynamicResource Settings.Language}"
-                               Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
-                    <StackPanel Orientation="Horizontal">
-                        <RadioButton Content="English"
-                                     IsChecked="{Binding IsEnglish}"
-                                     Style="{StaticResource MaterialDesignRadioButton}"
-                                     Command="{Binding SetLanguageCommand}" CommandParameter="en-US"
-                                     Margin="0,0,16,0"/>
-                        <RadioButton Content="Русский"
-                                     IsChecked="{Binding IsRussian}"
-                                     Style="{StaticResource MaterialDesignRadioButton}"
-                                     Command="{Binding SetLanguageCommand}" CommandParameter="ru-RU"/>
-                    </StackPanel>
-                </StackPanel>
-            </materialDesign:Card>
+            <!-- ===== Left column: actionable settings ===== -->
+            <StackPanel Grid.Column="0" Margin="0,44,0,0">
 
-            <!-- Theme -->
-            <materialDesign:Card Padding="20" Margin="0,0,0,16">
-                <StackPanel>
-                    <TextBlock Text="{DynamicResource Settings.Theme}"
-                               Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
-                    <StackPanel Orientation="Horizontal">
-                        <RadioButton Content="{DynamicResource Settings.Theme.Light}"
-                                     IsChecked="{Binding IsLightTheme}"
-                                     Style="{StaticResource MaterialDesignRadioButton}"
-                                     Command="{Binding SetThemeCommand}" CommandParameter="Light"
-                                     Margin="0,0,16,0"/>
-                        <RadioButton Content="{DynamicResource Settings.Theme.Dark}"
-                                     IsChecked="{Binding IsDarkTheme}"
-                                     Style="{StaticResource MaterialDesignRadioButton}"
-                                     Command="{Binding SetThemeCommand}" CommandParameter="Dark"/>
-                    </StackPanel>
-                </StackPanel>
-            </materialDesign:Card>
-
-            <!-- Thumbnail cache -->
-            <materialDesign:Card Padding="20" Margin="0,0,0,16">
-                <StackPanel>
-                    <TextBlock Text="{DynamicResource Settings.ThumbnailCache}"
-                               Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
-                    <Button Content="{DynamicResource Settings.ClearCache}"
-                            Command="{Binding ClearCacheCommand}"
-                            Style="{StaticResource MaterialDesignRaisedButton}"
-                            HorizontalAlignment="Left"/>
-                    <TextBlock Text="{Binding StatusMessage}"
-                               Foreground="{DynamicResource PrimaryHueMidBrush}"
-                               Margin="0,8,0,0" FontSize="12"/>
-                </StackPanel>
-            </materialDesign:Card>
-
-            <!-- About -->
-            <materialDesign:Card Padding="20" Margin="0,0,0,16">
-                <StackPanel>
-                    <TextBlock Text="{DynamicResource Settings.About}"
-                               Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
-                    <TextBlock Text="{DynamicResource Settings.Version}"
-                               Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" Margin="0,0,0,8"/>
-                    <TextBlock Text="kichnap"
-                               Style="{StaticResource MaterialDesignBody2TextBlock}"
-                               FontWeight="Medium" Margin="0,0,0,4"/>
-                    <Button Content="{DynamicResource Settings.GitHub}"
-                            Command="{Binding OpenGitHubCommand}"
-                            Style="{StaticResource MaterialDesignFlatButton}"
-                            HorizontalAlignment="Left"
-                            Foreground="{DynamicResource PrimaryHueMidBrush}"
-                            Padding="0,4"/>
-                </StackPanel>
-            </materialDesign:Card>
-
-            <!-- Open-source components (required attribution for MIT licenses) -->
-            <materialDesign:Card Padding="20" Margin="0,0,0,16">
-                <StackPanel>
-                    <TextBlock Text="{DynamicResource Settings.OpenSource}"
-                               Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,12"/>
+                <!-- Language -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16">
                     <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <TextBlock Text="PDFsharp" FontWeight="Medium" Width="200"/>
-                            <TextBlock Text="MIT" Opacity="0.6"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <TextBlock Text="PDFtoImage" FontWeight="Medium" Width="200"/>
-                            <TextBlock Text="MIT" Opacity="0.6"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <TextBlock Text="SkiaSharp" FontWeight="Medium" Width="200"/>
-                            <TextBlock Text="MIT" Opacity="0.6"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <TextBlock Text="MaterialDesignThemes" FontWeight="Medium" Width="200"/>
-                            <TextBlock Text="MIT" Opacity="0.6"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <TextBlock Text="CommunityToolkit.Mvvm" FontWeight="Medium" Width="200"/>
-                            <TextBlock Text="MIT" Opacity="0.6"/>
+                        <TextBlock Text="{DynamicResource Settings.Language}"
+                                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="English"
+                                         IsChecked="{Binding IsEnglish}"
+                                         Style="{StaticResource MaterialDesignRadioButton}"
+                                         Command="{Binding SetLanguageCommand}" CommandParameter="en-US"
+                                         Margin="0,0,16,0"/>
+                            <RadioButton Content="Русский"
+                                         IsChecked="{Binding IsRussian}"
+                                         Style="{StaticResource MaterialDesignRadioButton}"
+                                         Command="{Binding SetLanguageCommand}" CommandParameter="ru-RU"/>
                         </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </materialDesign:Card>
+                </materialDesign:Card>
 
-        </StackPanel>
+                <!-- Theme -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Settings.Theme}"
+                                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="{DynamicResource Settings.Theme.Light}"
+                                         IsChecked="{Binding IsLightTheme}"
+                                         Style="{StaticResource MaterialDesignRadioButton}"
+                                         Command="{Binding SetThemeCommand}" CommandParameter="Light"
+                                         Margin="0,0,16,0"/>
+                            <RadioButton Content="{DynamicResource Settings.Theme.Dark}"
+                                         IsChecked="{Binding IsDarkTheme}"
+                                         Style="{StaticResource MaterialDesignRadioButton}"
+                                         Command="{Binding SetThemeCommand}" CommandParameter="Dark"/>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- After saving -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Settings.PostSave}"
+                                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+                        <RadioButton Content="{DynamicResource Settings.PostSave.Nothing}"
+                                     IsChecked="{Binding PostSaveNothing}"
+                                     Style="{StaticResource MaterialDesignRadioButton}"
+                                     Command="{Binding SetPostSaveCommand}" CommandParameter="Nothing"
+                                     Margin="0,0,0,4"/>
+                        <RadioButton Content="{DynamicResource Settings.PostSave.OpenFolder}"
+                                     IsChecked="{Binding PostSaveOpenFolder}"
+                                     Style="{StaticResource MaterialDesignRadioButton}"
+                                     Command="{Binding SetPostSaveCommand}" CommandParameter="OpenFolder"
+                                     Margin="0,0,0,4"/>
+                        <RadioButton Content="{DynamicResource Settings.PostSave.OpenFile}"
+                                     IsChecked="{Binding PostSaveOpenFile}"
+                                     Style="{StaticResource MaterialDesignRadioButton}"
+                                     Command="{Binding SetPostSaveCommand}" CommandParameter="OpenFile"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Thumbnail cache -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Settings.ThumbnailCache}"
+                                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+                        <Button Content="{DynamicResource Settings.ClearCache}"
+                                Command="{Binding ClearCacheCommand}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding StatusMessage}"
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                   Margin="0,8,0,0" FontSize="12"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+            </StackPanel>
+
+            <!-- ===== Right column: About + components ===== -->
+            <StackPanel Grid.Column="2" Margin="0,44,0,0">
+
+                <!-- About -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Settings.About}"
+                                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+                        <TextBlock Text="{DynamicResource Settings.Version}"
+                                   Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" Margin="0,0,0,8"/>
+                        <TextBlock Text="kichnap"
+                                   Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                   FontWeight="Medium" Margin="0,0,0,4"/>
+                        <Button Content="{DynamicResource Settings.GitHub}"
+                                Command="{Binding OpenGitHubCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                HorizontalAlignment="Left"
+                                Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                Padding="0,4"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Open-source components -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Settings.OpenSource}"
+                                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,12"/>
+
+                        <!-- PDFsharp -->
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0">
+                                <Hyperlink NavigateUri="https://github.com/empira/PDFsharp"
+                                           RequestNavigate="Hyperlink_RequestNavigate">PDFsharp</Hyperlink>
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" Text="MIT" Opacity="0.6" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <!-- PDFtoImage -->
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0">
+                                <Hyperlink NavigateUri="https://github.com/sungaila/PDFtoImage"
+                                           RequestNavigate="Hyperlink_RequestNavigate">PDFtoImage</Hyperlink>
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" Text="MIT" Opacity="0.6" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <!-- SkiaSharp -->
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0">
+                                <Hyperlink NavigateUri="https://github.com/mono/SkiaSharp"
+                                           RequestNavigate="Hyperlink_RequestNavigate">SkiaSharp</Hyperlink>
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" Text="MIT" Opacity="0.6" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <!-- MaterialDesignThemes -->
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap">
+                                <Hyperlink NavigateUri="https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit"
+                                           RequestNavigate="Hyperlink_RequestNavigate">MaterialDesignThemes</Hyperlink>
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" Text="MIT" Opacity="0.6" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <!-- CommunityToolkit.Mvvm -->
+                        <Grid Margin="0,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap">
+                                <Hyperlink NavigateUri="https://github.com/CommunityToolkit/dotnet"
+                                           RequestNavigate="Hyperlink_RequestNavigate">CommunityToolkit.Mvvm</Hyperlink>
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" Text="MIT" Opacity="0.6" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                    </StackPanel>
+                </materialDesign:Card>
+
+            </StackPanel>
+        </Grid>
     </ScrollViewer>
 </UserControl>

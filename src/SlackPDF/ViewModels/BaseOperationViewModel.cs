@@ -3,7 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using SlackPDF.Core;
 using SlackPDF.Core.Models;
+using SlackPDF.Services;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace SlackPDF.ViewModels;
 
@@ -55,9 +57,14 @@ public abstract partial class BaseOperationViewModel : ObservableObject
             var result = await operation(prog, _cts.Token);
 
             if (result.Success)
+            {
                 StatusMessage = Localization.LocalizationManager.Get("Common.Success", result.OutputPath ?? string.Empty);
+                ApplyPostSaveAction(result.OutputPath);
+            }
             else
+            {
                 StatusMessage = Localization.LocalizationManager.Get("Common.Error", result.ErrorMessage ?? "Unknown error");
+            }
         }
         finally
         {
@@ -65,6 +72,24 @@ public abstract partial class BaseOperationViewModel : ObservableObject
             _cts?.Dispose();
             _cts = null;
         }
+    }
+
+    private static void ApplyPostSaveAction(string? path)
+    {
+        if (string.IsNullOrEmpty(path)) return;
+        try
+        {
+            switch (SettingsService.Current.PostSave)
+            {
+                case PostSaveAction.OpenFolder:
+                    Process.Start("explorer.exe", $"/select,\"{path}\"");
+                    break;
+                case PostSaveAction.OpenFile:
+                    Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+                    break;
+            }
+        }
+        catch { }
     }
 
     protected static PdfFileInfo? OpenPdfFile()

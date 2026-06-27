@@ -1,8 +1,10 @@
 using SlackPDF.ViewModels;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SlackPDF.Views;
 
@@ -11,7 +13,9 @@ public partial class ComposerView : UserControl
     private ComposerPageThumb? _dragSource;
     private Point _dragStartPos;
     private bool _isDragging;
-    private int _lastClickedIndex = -1; // anchor for Shift+click range select
+    private int _lastClickedIndex = -1;
+    private int _insertionIndex = -1;
+    private InsertAdorner? _insertAdorner;
 
     public ComposerView()
     {
@@ -19,14 +23,11 @@ public partial class ComposerView : UserControl
         Loaded += OnViewLoaded;
     }
 
-    // Restore column width from ViewModel after the view is recreated (navigation away/back)
     private void OnViewLoaded(object sender, RoutedEventArgs e)
     {
         if (DataContext is ComposerViewModel vm)
             SourceColumn.Width = new GridLength(vm.SourcePanelWidth, GridUnitType.Pixel);
 
-        // Save width only when the user finishes dragging the splitter,
-        // NOT on every SizeChanged (which fires during initial layout and would overwrite the stored value)
         SourceSplitter.AddHandler(
             Thumb.DragCompletedEvent,
             new DragCompletedEventHandler(OnSplitterDragCompleted));
@@ -37,6 +38,8 @@ public partial class ComposerView : UserControl
         if (DataContext is ComposerViewModel vm)
             vm.SourcePanelWidth = SourceColumn.ActualWidth;
     }
+
+    // ─── Source thumbnail selection ─────────────────────────────────────────
 
     private void SourceThumb_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -50,7 +53,6 @@ public partial class ComposerView : UserControl
 
             if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && pages != null)
             {
-                // Range select from the last anchor to current
                 int currentIdx = pages.IndexOf(thumb);
                 int anchorIdx = _lastClickedIndex >= 0 && _lastClickedIndex < pages.Count
                     ? _lastClickedIndex : currentIdx;
@@ -59,16 +61,13 @@ public partial class ComposerView : UserControl
                 int to   = Math.Max(anchorIdx, currentIdx);
                 foreach (var t in pages) t.IsSelected = false;
                 for (int i = from; i <= to; i++) pages[i].IsSelected = true;
-                // Shift+click does NOT move the anchor (_lastClickedIndex stays)
             }
             else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                // Toggle this thumb without disturbing others
                 thumb.IsSelected = !thumb.IsSelected;
                 if (pages != null) _lastClickedIndex = pages.IndexOf(thumb);
             }
-            // Plain click: defer selection change to MouseUp so dragging already-selected
-            // items doesn't first deselect them. We need MouseUp to know if drag happened.
+            // Plain click: defer to MouseUp so an already-selected item can be dragged
         }
     }
 
@@ -80,7 +79,7 @@ public partial class ComposerView : UserControl
         Point pos = e.GetPosition(null);
         if (Math.Abs(pos.X - _dragStartPos.X) < SystemParameters.MinimumHorizontalDragDistance &&
             Math.Abs(pos.Y - _dragStartPos.Y) < SystemParameters.MinimumVerticalDragDistance)
-            return; // movement below drag threshold — still a potential click
+            return;
 
         _isDragging = true;
 
@@ -91,7 +90,6 @@ public partial class ComposerView : UserControl
 
             if (_dragSource.IsSelected)
             {
-                // Drag source is part of the selection → drag everything selected
                 pagesToDrag = pages
                     .Where(p => p.IsSelected)
                     .OrderBy(p => p.PageIndex)
@@ -100,7 +98,6 @@ public partial class ComposerView : UserControl
             }
             else
             {
-                // Dragging an unselected item → clear selection, select+drag only this one
                 foreach (var t in pages) t.IsSelected = false;
                 _dragSource.IsSelected = true;
                 _lastClickedIndex = pages.IndexOf(_dragSource);
@@ -111,7 +108,6 @@ public partial class ComposerView : UserControl
         if (pagesToDrag.Count == 0)
             pagesToDrag = [new PageDragItem { FilePath = _dragSource.FilePath, PageIndex = _dragSource.PageIndex }];
 
-        // DoDragDrop blocks until the user drops or cancels
         DragDrop.DoDragDrop(element, new DataObject("SlackPdfPages", pagesToDrag), DragDropEffects.Copy);
         _dragSource = null;
         _isDragging = false;
@@ -119,38 +115,198 @@ public partial class ComposerView : UserControl
 
     private void SourceThumb_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-        // _dragSource is null after a completed drag, so this only runs for plain clicks
         if (_dragSource == null) return;
 
         if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Control) &&
             !Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
         {
-            // Plain click: select only the clicked thumb
             if (DataContext is ComposerViewModel vm && vm.ActiveDocument != null)
             {
                 var pages = vm.ActiveDocument.Pages;
+                // Re-click on the only selected item → deselect (toggle off)
+                bool wasSelected = _dragSource.IsSelected;
                 foreach (var t in pages) t.IsSelected = false;
-                _dragSource.IsSelected = true;
-                _lastClickedIndex = pages.IndexOf(_dragSource);
+                if (!wasSelected)
+                {
+                    _dragSource.IsSelected = true;
+                    _lastClickedIndex = pages.IndexOf(_dragSource);
+                }
             }
         }
         _dragSource = null;
     }
 
+    // ─── Assembly drop zone ─────────────────────────────────────────────────
+
     private void Assembly_DragOver(object sender, DragEventArgs e)
     {
-        e.Effects = e.Data.GetDataPresent("SlackPdfPages")
-            ? DragDropEffects.Copy
-            : DragDropEffects.None;
+        if (!e.Data.GetDataPresent("SlackPdfPages"))
+        {
+            e.Effects = DragDropEffects.None;
+            HideInsertAdorner();
+            e.Handled = true;
+            return;
+        }
+
+        e.Effects = DragDropEffects.Copy;
+
+        var panel = GetAssemblyWrapPanel();
+        if (panel != null)
+        {
+            Point pt = e.GetPosition(panel);
+            _insertionIndex = FindInsertionIndex(panel, pt, out double lx, out double ly, out double lh);
+            EnsureInsertAdorner(panel);
+            _insertAdorner?.SetLine(lx, ly, lh);
+        }
+
         e.Handled = true;
+    }
+
+    private void Assembly_DragLeave(object sender, DragEventArgs e)
+    {
+        // Only hide when cursor actually leaves the ScrollViewer bounds (not on child transitions)
+        if (sender is FrameworkElement fe)
+        {
+            Point pos = e.GetPosition(fe);
+            if (pos.X < 0 || pos.Y < 0 || pos.X > fe.ActualWidth || pos.Y > fe.ActualHeight)
+                HideInsertAdorner();
+        }
     }
 
     private void Assembly_Drop(object sender, DragEventArgs e)
     {
+        HideInsertAdorner();
         if (e.Data.GetData("SlackPdfPages") is not List<PageDragItem> pages) return;
         if (DataContext is not ComposerViewModel vm) return;
+
+        int idx = _insertionIndex >= 0 ? _insertionIndex : vm.ComposedPages.Count;
         foreach (var p in pages)
-            vm.InsertPage(p.FilePath, p.PageIndex, vm.ComposedPages.Count);
+            vm.InsertPage(p.FilePath, p.PageIndex, idx++);
+
+        _insertionIndex = -1;
+    }
+
+    // ─── Insertion indicator adorner ────────────────────────────────────────
+
+    private void EnsureInsertAdorner(WrapPanel panel)
+    {
+        if (_insertAdorner != null) return;
+        var layer = AdornerLayer.GetAdornerLayer(panel);
+        if (layer == null) return;
+        _insertAdorner = new InsertAdorner(panel);
+        layer.Add(_insertAdorner);
+    }
+
+    private void HideInsertAdorner()
+    {
+        if (_insertAdorner == null) return;
+        var layer = AdornerLayer.GetAdornerLayer(_insertAdorner.AdornedElement);
+        layer?.Remove(_insertAdorner);
+        _insertAdorner = null;
+    }
+
+    /// <summary>
+    /// Finds the insertion gap in the assembly WrapPanel closest to <paramref name="pt"/>.
+    /// Returns the target index and the (x, y, height) of where to draw the indicator line.
+    /// </summary>
+    private static int FindInsertionIndex(WrapPanel panel, Point pt,
+        out double lineX, out double lineY, out double lineH)
+    {
+        lineX = 8; lineY = 8; lineH = 120;
+        int n = panel.Children.Count;
+        if (n == 0) return 0;
+
+        FrameworkElement? lastOnRow = null;
+        int lastOnRowIdx = -1;
+
+        for (int i = 0; i < n; i++)
+        {
+            if (panel.Children[i] is not FrameworkElement child) continue;
+            var origin = child.TranslatePoint(new Point(0, 0), panel);
+            double cw = child.ActualWidth, ch = child.ActualHeight;
+
+            bool onRow = pt.Y >= origin.Y - 4 && pt.Y <= origin.Y + ch + 4;
+            if (!onRow) continue;
+
+            lastOnRow = child;
+            lastOnRowIdx = i;
+
+            if (pt.X <= origin.X + cw / 2)
+            {
+                // Insert before item i
+                lineX = origin.X;
+                lineY = origin.Y + 4;
+                lineH = ch - 8;
+                return i;
+            }
+        }
+
+        if (lastOnRow != null)
+        {
+            // Cursor is past the midpoint of the last item on its row → insert after it
+            var origin = lastOnRow.TranslatePoint(new Point(0, 0), panel);
+            lineX = origin.X + lastOnRow.ActualWidth;
+            lineY = origin.Y + 4;
+            lineH = lastOnRow.ActualHeight - 8;
+            return lastOnRowIdx + 1;
+        }
+
+        // Below all items → append at end
+        if (panel.Children[n - 1] is FrameworkElement last)
+        {
+            var origin = last.TranslatePoint(new Point(0, 0), panel);
+            lineX = origin.X + last.ActualWidth;
+            lineY = origin.Y + 4;
+            lineH = last.ActualHeight - 8;
+        }
+        return n;
+    }
+
+    private WrapPanel? GetAssemblyWrapPanel() => FindVisualChild<WrapPanel>(AssemblyPanel);
+
+    private static T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T found) return found;
+            var nested = FindVisualChild<T>(child);
+            if (nested != null) return nested;
+        }
+        return null;
+    }
+
+    // ─── Insert indicator adorner class ─────────────────────────────────────
+
+    private sealed class InsertAdorner : Adorner
+    {
+        private double _x, _y, _h;
+
+        private static readonly Pen LinePen;
+        private static readonly SolidColorBrush DotBrush;
+
+        static InsertAdorner()
+        {
+            DotBrush = new SolidColorBrush(Color.FromRgb(33, 150, 243));
+            DotBrush.Freeze();
+            LinePen = new Pen(DotBrush, 2.5) { StartLineCap = PenLineCap.Round, EndLineCap = PenLineCap.Round };
+            LinePen.Freeze();
+        }
+
+        internal InsertAdorner(UIElement element) : base(element) { IsHitTestVisible = false; }
+
+        internal void SetLine(double x, double y, double h)
+        {
+            _x = x; _y = y; _h = h;
+            InvalidateVisual();
+        }
+
+        protected override void OnRender(DrawingContext dc)
+        {
+            dc.DrawLine(LinePen, new Point(_x, _y - 4), new Point(_x, _y + _h + 4));
+            dc.DrawEllipse(DotBrush, null, new Point(_x, _y - 4), 4, 4);
+            dc.DrawEllipse(DotBrush, null, new Point(_x, _y + _h + 4), 4, 4);
+        }
     }
 }
 

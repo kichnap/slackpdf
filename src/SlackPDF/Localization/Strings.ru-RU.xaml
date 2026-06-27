@@ -130,6 +130,10 @@
   <sys:String x:Key="Settings.CacheCleared">Кэш миниатюр очищен.</sys:String>
   <sys:String x:Key="Settings.Version">Версия 1.0.0 — GPL v3 — Бесплатно и открыто</sys:String>
   <sys:String x:Key="Settings.OpenSource">Компоненты с открытым исходным кодом</sys:String>
+  <sys:String x:Key="Settings.PostSave">После сохранения</sys:String>
+  <sys:String x:Key="Settings.PostSave.Nothing">Ничего не делать</sys:String>
+  <sys:String x:Key="Settings.PostSave.OpenFolder">Открыть папку с файлом</sys:String>
+  <sys:String x:Key="Settings.PostSave.OpenFile">Открыть файл</sys:String>
   <sys:String x:Key="MainWindow.Engine">Движок:</sys:String>
 
 </ResourceDictionary>
