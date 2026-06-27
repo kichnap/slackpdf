@@ -11,7 +11,10 @@
                        Margin="0,0,0,16"/>
 
             <!-- Input -->
-            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+            <materialDesign:Card Padding="16" Margin="0,0,0,16"
+                                 AllowDrop="True"
+                                 PreviewDragOver="InputFile_DragOver"
+                                 PreviewDrop="InputFile_Drop">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>

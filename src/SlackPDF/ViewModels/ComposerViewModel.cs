@@ -79,6 +79,7 @@ public partial class ComposerViewModel : BaseOperationViewModel
     [ObservableProperty] private ObservableCollection<ComposerDocument> _documents = [];
     [ObservableProperty] private ObservableCollection<ComposerPage> _composedPages = [];
     [ObservableProperty] private ComposerDocument? _activeDocument;
+    [ObservableProperty] private bool _isLoadingDocuments;
 
     // Persists the left-panel width across navigation
     [ObservableProperty] private double _sourcePanelWidth = 260;
@@ -97,43 +98,63 @@ public partial class ComposerViewModel : BaseOperationViewModel
         var dlg = new OpenFileDialog { Filter = "PDF files (*.pdf)|*.pdf", Multiselect = true };
         if (dlg.ShowDialog() != true) return;
 
-        ComposerDocument? firstAdded = null;
-        foreach (var fileName in dlg.FileNames)
+        IsLoadingDocuments = true;
+        await Task.Delay(1); // Let WPF render the spinner before opening files
+        try
         {
-            try
+            ComposerDocument? firstAdded = null;
+            foreach (var fileName in dlg.FileNames)
             {
-                int labelIdx = Documents.Count;
-                string label = labelIdx < 26
-                    ? ((char)('A' + labelIdx)).ToString()
-                    : $"#{labelIdx + 1}";
-                var color = Palette[labelIdx % Palette.Length];
-
-                string pdfVersion;
-                int pageCount;
-                using (var doc = PdfSharp.Pdf.IO.PdfReader.Open(fileName, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import))
-                {
-                    pageCount = doc.PageCount;
-                    pdfVersion = $"PDF {doc.Version / 10}.{doc.Version % 10}";
-                }
-
-                var info = new PdfFileInfo(fileName, Path.GetFileName(fileName),
-                    pageCount, new FileInfo(fileName).Length, PageSelection.All)
-                { Label = label, Color = color };
-
-                var compDoc = new ComposerDocument
-                {
-                    Info = info, Label = label, Color = color, PdfVersion = pdfVersion
-                };
-                Documents.Add(compDoc);
-                firstAdded ??= compDoc;
-
-                _ = LoadDocumentThumbnailsAsync(compDoc);
+                var doc = await AddDocumentFromFileAsync(fileName);
+                firstAdded ??= doc;
             }
-            catch { }
+            if (firstAdded != null)
+                ActiveDocument = firstAdded;
         }
+        finally
+        {
+            IsLoadingDocuments = false;
+        }
+    }
 
-        if (firstAdded != null)
-            ActiveDocument = firstAdded;
+    public async Task<ComposerDocument?> AddDocumentFromFileAsync(string filePath)
+    {
+        try
+        {
+            int labelIdx = Documents.Count;
+            string label = labelIdx < 26
+                ? ((char)('A' + labelIdx)).ToString()
+                : $"#{labelIdx + 1}";
+            var color = Palette[labelIdx % Palette.Length];
+
+            // Open PDF on thread pool — avoids freezing for large files
+            var (pageCount, pdfVersion) = await Task.Run(() =>
+            {
+                using var doc = PdfSharp.Pdf.IO.PdfReader.Open(filePath, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
+                return (doc.PageCount, $"PDF {doc.Version / 10}.{doc.Version % 10}");
+            });
+
+            var info = new PdfFileInfo(filePath, Path.GetFileName(filePath),
+                pageCount, new FileInfo(filePath).Length, PageSelection.All)
+            { Label = label, Color = color };
+
+            var compDoc = new ComposerDocument
+            {
+                Info = info, Label = label, Color = color, PdfVersion = pdfVersion
+            };
+            Documents.Add(compDoc);
+            _ = LoadDocumentThumbnailsAsync(compDoc);
+            return compDoc;
+        }
+        catch { return null; }
+    }
+
+    [RelayCommand]
+    private void RemoveDocument(ComposerDocument doc)
+    {
+        Documents.Remove(doc);
+        if (ActiveDocument == doc)
+            ActiveDocument = Documents.FirstOrDefault();
     }
 
     private async Task LoadDocumentThumbnailsAsync(ComposerDocument doc)

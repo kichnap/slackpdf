@@ -23,20 +23,25 @@ public partial class SplitViewModel : BaseOperationViewModel
 
     public IEnumerable<SplitMode> SplitModes => Enum.GetValues<SplitMode>();
 
+    public void SetInputFile(string path)
+    {
+        InputFilePath = path;
+        InputFileName = Path.GetFileName(path);
+        FileNamePrefix = Path.GetFileNameWithoutExtension(path);
+        try
+        {
+            using var doc = PdfSharp.Pdf.IO.PdfReader.Open(path, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
+            InputPageCount = doc.PageCount;
+        }
+        catch { InputPageCount = 0; }
+    }
+
     [RelayCommand]
     private void BrowseInput()
     {
         var dlg = new OpenFileDialog { Filter = "PDF files (*.pdf)|*.pdf" };
         if (dlg.ShowDialog() != true) return;
-        InputFilePath = dlg.FileName;
-        InputFileName = Path.GetFileName(dlg.FileName);
-        FileNamePrefix = Path.GetFileNameWithoutExtension(dlg.FileName);
-        try
-        {
-            using var doc = PdfSharp.Pdf.IO.PdfReader.Open(dlg.FileName, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
-            InputPageCount = doc.PageCount;
-        }
-        catch { InputPageCount = 0; }
+        SetInputFile(dlg.FileName);
     }
 
     [RelayCommand]
@@ -50,7 +55,11 @@ public partial class SplitViewModel : BaseOperationViewModel
     [RelayCommand]
     private async Task RunAsync()
     {
-        if (string.IsNullOrWhiteSpace(InputFilePath) || string.IsNullOrWhiteSpace(OutputFolder)) return;
+        if (string.IsNullOrWhiteSpace(InputFilePath)) return;
+
+        var outputFolder = string.IsNullOrWhiteSpace(OutputFolder)
+            ? Path.GetDirectoryName(InputFilePath)!
+            : OutputFolder;
 
         int[]? atPages = null;
         if (SelectedMode == SplitMode.AtPages && !string.IsNullOrWhiteSpace(AtPagesText))
@@ -61,6 +70,6 @@ public partial class SplitViewModel : BaseOperationViewModel
 
         var options = new SplitOptions(SelectedMode, NPages, atPages, MaxSizeMb, BookmarkLevel, FileNamePrefix);
         await RunOperationAsync((progress, ct) =>
-            _ops.SplitAsync(InputFilePath, OutputFolder, options, progress, ct));
+            _ops.SplitAsync(InputFilePath, outputFolder, options, progress, ct));
     }
 }

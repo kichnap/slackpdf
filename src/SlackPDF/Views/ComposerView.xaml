@@ -18,10 +18,10 @@
                        VerticalAlignment="Center" Margin="8,0"/>
             <Separator/>
             <Button Content="{DynamicResource Composer.AutoOrder}"
-                    Command="{Binding AutoOrderCommand}"
+                    Click="AutoOrder_Click"
                     Style="{StaticResource MaterialDesignFlatButton}"/>
             <Button Content="{DynamicResource Common.ClearAll}"
-                    Command="{Binding ClearAllCommand}"
+                    Click="ClearAll_Click"
                     Style="{StaticResource MaterialDesignFlatButton}"/>
             <Separator/>
             <Button Content="{DynamicResource Composer.SavePdf}"
@@ -57,6 +57,7 @@
                         <TextBlock Text="{DynamicResource Composer.Sources}"
                                    Style="{StaticResource MaterialDesignBody1TextBlock}"
                                    VerticalAlignment="Center"/>
+                        <!-- + button -->
                         <Button DockPanel.Dock="Right"
                                 Style="{StaticResource MaterialDesignIconButton}"
                                 Command="{Binding AddDocumentCommand}"
@@ -65,27 +66,36 @@
                                 Width="32" Height="32">
                             <materialDesign:PackIcon Kind="Plus"/>
                         </Button>
+                        <!-- Loading spinner shown while PDF files are being opened -->
+                        <ProgressBar DockPanel.Dock="Right"
+                                     Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                     IsIndeterminate="True" Value="0"
+                                     Width="20" Height="20" Margin="0,0,4,0"
+                                     Visibility="{Binding IsLoadingDocuments, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </DockPanel>
                 </Border>
 
-                <!-- Document tab strip: each label shows a tooltip with file metadata -->
+                <!-- Document tab strip: each label shows a tooltip with file metadata.
+                     WrapPanel so tabs flow to the next row when there are many documents. -->
                 <ListBox DockPanel.Dock="Top"
                          ItemsSource="{Binding Documents}"
                          SelectedItem="{Binding ActiveDocument}"
-                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          HorizontalContentAlignment="Left">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
+                            <WrapPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type vm:ComposerDocument}">
-                            <StackPanel Orientation="Horizontal" Margin="4,2"
-                                        ToolTipService.ShowDuration="10000"
-                                        ToolTipService.InitialShowDelay="400">
-                                <StackPanel.ToolTip>
+                            <!-- Thin coloured border gives each tab a visual frame; tooltip on the whole tab -->
+                            <Border BorderThickness="1" BorderBrush="{Binding ColorBrush}"
+                                    CornerRadius="3" Margin="2,3,2,3"
+                                    ToolTipService.ShowDuration="10000"
+                                    ToolTipService.InitialShowDelay="400">
+                                <Border.ToolTip>
                                     <ToolTip>
                                         <StackPanel MinWidth="200">
                                             <TextBlock Text="{Binding FileName}"
@@ -108,18 +118,43 @@
                                             </StackPanel>
                                         </StackPanel>
                                     </ToolTip>
-                                </StackPanel.ToolTip>
-                                <Ellipse Width="10" Height="10" Fill="{Binding ColorBrush}" Margin="0,0,4,0"/>
-                                <TextBlock Text="{Binding Label}" FontWeight="Bold"/>
-                            </StackPanel>
+                                </Border.ToolTip>
+                            <Grid MinWidth="48" Margin="2,2,4,2">
+
+                                <!-- Colour dot + letter; top margin leaves room for the × button -->
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                                            Margin="4,4,4,2">
+                                    <Ellipse Width="10" Height="10" Fill="{Binding ColorBrush}"
+                                             Margin="0,0,2,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Label}" FontWeight="Bold"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <!-- Close button — top-right corner -->
+                                <Button Style="{StaticResource MaterialDesignIconButton}"
+                                        Width="14" Height="14" Padding="0"
+                                        HorizontalAlignment="Right" VerticalAlignment="Top"
+                                        Foreground="{DynamicResource MaterialDesignBody}"
+                                        Command="{Binding DataContext.RemoveDocumentCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="{DynamicResource Composer.Menu.Remove}">
+                                    <materialDesign:PackIcon Kind="Close" Width="12" Height="12"/>
+                                </Button>
+                            </Grid>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
 
                 <!-- Page thumbnails of active doc.
                      Click = select one. Ctrl+Click = toggle. Shift+Click = range.
-                     Drag any selected thumb to move all selected to Assembly. -->
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                     Drag any selected thumb to move all selected to Assembly.
+                     Drop PDF files from Explorer to add them as source documents. -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              AllowDrop="True"
+                              DragOver="SourcePanel_DragOver"
+                              Drop="SourcePanel_Drop">
                     <ItemsControl ItemsSource="{Binding ActiveDocument.Pages}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -215,7 +250,10 @@
                                         Background="{Binding FadedColorBrush}"
                                         BorderBrush="{Binding ColorBrush}"
                                         BorderThickness="2" CornerRadius="4"
-                                        ToolTipService.ShowDuration="5000">
+                                        Cursor="SizeAll"
+                                        ToolTipService.ShowDuration="5000"
+                                        MouseLeftButtonDown="AssemblyThumb_MouseLeftButtonDown"
+                                        MouseMove="AssemblyThumb_MouseMove">
                                     <Border.ToolTip>
                                         <ToolTip>
                                             <TextBlock Text="{Binding SourceFilePath}"/>

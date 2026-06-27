@@ -8,6 +8,8 @@ namespace SlackPDF.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
+    public static event EventHandler<bool>? ThemeChanged;
+
     private readonly ThumbnailService _thumbs;
     private AppSettings _settings;
 
@@ -54,6 +56,7 @@ public partial class SettingsViewModel : ObservableObject
         SettingsService.Save(_settings);
         IsLightTheme = theme == "Light";
         IsDarkTheme  = theme == "Dark";
+        ThemeChanged?.Invoke(null, theme == "Dark");
     }
 
     [RelayCommand]

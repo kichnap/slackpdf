@@ -1,4 +1,5 @@
 <div align="center">
+  <img src="docs/assets/logo.png" width="96" alt="SlackPDF"/>
   <h1>SlackPDF</h1>
   <p>Fast, free, open-source PDF toolkit for Windows</p>
 

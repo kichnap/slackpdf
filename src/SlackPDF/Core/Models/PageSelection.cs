@@ -1,6 +1,12 @@
 namespace SlackPDF.Core.Models;
 
-public record PageRange(int From, int? To);
+public record PageRange(int From, int? To)
+{
+    public override string ToString() =>
+        To == null ? $"{From}-" :
+        To == From ? $"{From}" :
+        $"{From}-{To}";
+}
 
 public class PageSelection
 {
@@ -48,6 +54,9 @@ public class PageSelection
 
         return ranges.Count == 0 ? All : new PageSelection(ranges);
     }
+
+    public override string ToString() =>
+        SelectAll ? string.Empty : string.Join(",", Ranges);
 
     public bool Contains(int pageNumber)
     {

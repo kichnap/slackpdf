@@ -24,19 +24,24 @@ public partial class ExtractViewModel : BaseOperationViewModel
 
     public IEnumerable<ExtractMode> ExtractModes => Enum.GetValues<ExtractMode>();
 
+    public void SetInputFile(string path)
+    {
+        InputFilePath = path;
+        InputFileName = Path.GetFileName(path);
+        try
+        {
+            using var doc = PdfSharp.Pdf.IO.PdfReader.Open(path, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
+            InputPageCount = doc.PageCount;
+        }
+        catch { InputPageCount = 0; }
+    }
+
     [RelayCommand]
     private void BrowseInput()
     {
         var dlg = new OpenFileDialog { Filter = "PDF files (*.pdf)|*.pdf" };
         if (dlg.ShowDialog() != true) return;
-        InputFilePath = dlg.FileName;
-        InputFileName = Path.GetFileName(dlg.FileName);
-        try
-        {
-            using var doc = PdfSharp.Pdf.IO.PdfReader.Open(dlg.FileName, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
-            InputPageCount = doc.PageCount;
-        }
-        catch { InputPageCount = 0; }
+        SetInputFile(dlg.FileName);
     }
 
     [RelayCommand]

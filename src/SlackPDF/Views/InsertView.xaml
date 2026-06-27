@@ -11,7 +11,10 @@
                        Margin="0,0,0,16"/>
 
             <!-- Base document -->
-            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+            <materialDesign:Card Padding="16" Margin="0,0,0,16"
+                                 AllowDrop="True"
+                                 PreviewDragOver="InputFile_DragOver"
+                                 PreviewDrop="BaseFile_Drop">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -35,7 +38,10 @@
             </materialDesign:Card>
 
             <!-- Insert document -->
-            <materialDesign:Card Padding="16" Margin="0,0,0,16">
+            <materialDesign:Card Padding="16" Margin="0,0,0,16"
+                                 AllowDrop="True"
+                                 PreviewDragOver="InputFile_DragOver"
+                                 PreviewDrop="InsertFile_Drop">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>

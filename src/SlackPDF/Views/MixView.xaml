@@ -29,7 +29,10 @@
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               MinHeight="160" MaxHeight="280"
-                              materialDesign:DataGridAssist.CellPadding="8 4">
+                              materialDesign:DataGridAssist.CellPadding="8 4"
+                              AllowDrop="True"
+                              PreviewDragOver="FileList_DragOver"
+                              PreviewDrop="FileList_Drop">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="*">
                                 <DataGridTemplateColumn.Header>

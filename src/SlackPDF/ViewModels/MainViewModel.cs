@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using SlackPDF.Core;
 using SlackPDF.Core.Engines;
 using SlackPDF.Services;
+using System.ComponentModel;
 
 namespace SlackPDF.ViewModels;
 
@@ -12,8 +13,10 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private string _activeEngineName = "PDFsharp";
     [ObservableProperty] private string _statusMessage = string.Empty;
     [ObservableProperty] private int _progress;
-    [ObservableProperty] private bool _isBusy;
+    [ObservableProperty] private bool _currentViewIsBusy;
     [ObservableProperty] private string _selectedNavItem = "Merge";
+
+    private ObservableObject? _previousView;
 
     public MergeViewModel    MergeVm    { get; }
     public SplitViewModel    SplitVm    { get; }
@@ -35,13 +38,37 @@ public partial class MainViewModel : ObservableObject
         MergeVm    = new MergeViewModel(ops);
         SplitVm    = new SplitViewModel(ops);
         MixVm      = new MixViewModel(ops);
-        RotateVm   = new RotateViewModel(ops);
+        RotateVm   = new RotateViewModel(ops, thumbs);
         ExtractVm  = new ExtractViewModel(ops, thumbs);
         InsertVm   = new InsertViewModel(ops);
         ComposerVm = new ComposerViewModel(ops, thumbs);
         SettingsVm = new SettingsViewModel(ops, thumbs);
 
         CurrentView = MergeVm;
+    }
+
+    partial void OnCurrentViewChanged(ObservableObject? value)
+    {
+        if (_previousView is BaseOperationViewModel oldVm)
+            oldVm.PropertyChanged -= OnCurrentVmPropertyChanged;
+
+        _previousView = value;
+
+        if (value is BaseOperationViewModel newVm)
+        {
+            newVm.PropertyChanged += OnCurrentVmPropertyChanged;
+            CurrentViewIsBusy = newVm.IsBusy;
+        }
+        else
+        {
+            CurrentViewIsBusy = false;
+        }
+    }
+
+    private void OnCurrentVmPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "IsBusy" && sender is BaseOperationViewModel vm)
+            CurrentViewIsBusy = vm.IsBusy;
     }
 
     [RelayCommand]

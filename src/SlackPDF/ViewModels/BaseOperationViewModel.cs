@@ -51,10 +51,12 @@ public abstract partial class BaseOperationViewModel : ObservableObject
         Progress = 0;
         StatusMessage = string.Empty;
 
+        // Small delay so WPF completes one render frame and shows the overlay before the heavy work
+        await Task.Delay(1);
+
         try
         {
             var prog = new Progress<int>(p => Progress = p);
-            // Run on a thread-pool thread so the UI stays responsive
             var result = await Task.Run(async () => await operation(prog, _cts.Token));
 
             if (result.Success)
@@ -83,7 +85,11 @@ public abstract partial class BaseOperationViewModel : ObservableObject
             switch (SettingsService.Current.PostSave)
             {
                 case PostSaveAction.OpenFolder:
-                    Process.Start("explorer.exe", $"/select,\"{path}\"");
+                    // For directories open them directly; /select, targets the parent folder
+                    if (Directory.Exists(path))
+                        Process.Start("explorer.exe", $"\"{path}\"");
+                    else
+                        Process.Start("explorer.exe", $"/select,\"{path}\"");
                     break;
                 case PostSaveAction.OpenFile:
                     Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });

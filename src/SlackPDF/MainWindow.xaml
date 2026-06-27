@@ -198,7 +198,7 @@
                              IsIndeterminate="True"
                              Height="4"
                              Margin="16,0"
-                             Visibility="{Binding CurrentView.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                             Visibility="{Binding CurrentViewIsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
                              Style="{StaticResource MaterialDesignLinearProgressBar}"/>
 
                 <TextBlock Grid.Column="2" VerticalAlignment="Center" FontSize="12" Opacity="0.6">
@@ -215,7 +215,7 @@
               Grid.Row="0" Grid.RowSpan="2"
               Panel.ZIndex="100"
               Background="#99000000"
-              Visibility="{Binding CurrentView.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+              Visibility="{Binding CurrentViewIsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                          IsIndeterminate="True"
                          Value="0"

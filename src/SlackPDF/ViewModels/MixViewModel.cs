@@ -43,6 +43,17 @@ public partial class MixViewModel : BaseOperationViewModel
         }
     }
 
+    public void AddFile(string path)
+    {
+        if (Files.Any(x => x.FilePath == path)) return;
+        try
+        {
+            using var doc = PdfSharp.Pdf.IO.PdfReader.Open(path, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
+            Files.Add(new MixFileEntry { FilePath = path, FileName = Path.GetFileName(path), PageCount = doc.PageCount });
+        }
+        catch { }
+    }
+
     [RelayCommand]
     private void RemoveFile(MixFileEntry entry) => Files.Remove(entry);
 

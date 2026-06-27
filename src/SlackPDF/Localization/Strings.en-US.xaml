@@ -77,6 +77,11 @@
   <sys:String x:Key="Rotate.Overwrite">Overwrite original</sys:String>
   <sys:String x:Key="Rotate.OverwriteWarning">Warning: this will replace the original file!</sys:String>
   <sys:String x:Key="Rotate.ApplyTo">Apply to</sys:String>
+  <sys:String x:Key="Rotate.PickPages">Choose pages…</sys:String>
+  <sys:String x:Key="Rotate.Picker.Title">Select pages to rotate</sys:String>
+  <sys:String x:Key="Rotate.Picker.SelectAll">Select all</sys:String>
+  <sys:String x:Key="Rotate.Picker.ClearAll">Clear</sys:String>
+  <sys:String x:Key="Rotate.Picker.Apply">Apply</sys:String>
 
   <!-- Extract -->
   <sys:String x:Key="Extract.Title">Extract pages</sys:String>
@@ -101,6 +106,7 @@
   <sys:String x:Key="Composer.AddDocument">Add document</sys:String>
   <sys:String x:Key="Composer.DropHere">Drop pages here to build your document</sys:String>
   <sys:String x:Key="Composer.ClearConfirm">Clear all pages from the assembly?</sys:String>
+  <sys:String x:Key="Composer.AutoOrderConfirm">Sort all pages by document label and page number?</sys:String>
   <sys:String x:Key="Composer.AutoOrder">Auto order</sys:String>
   <sys:String x:Key="Composer.SavePdf">Save PDF</sys:String>
   <sys:String x:Key="Composer.PageCount">{0} pages in assembly</sys:String>

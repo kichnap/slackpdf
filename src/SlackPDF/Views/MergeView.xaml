@@ -31,7 +31,9 @@
                               IsReadOnly="False"
                               MinHeight="160" MaxHeight="300"
                               materialDesign:DataGridAssist.CellPadding="8 4"
-                              AllowDrop="True">
+                              AllowDrop="True"
+                              PreviewDragOver="FileList_DragOver"
+                              PreviewDrop="FileList_Drop">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="*">
                                 <DataGridTemplateColumn.Header>
@@ -60,7 +62,7 @@
                             </DataGridTextColumn>
                             <DataGridTemplateColumn Header="{DynamicResource Common.PageSelection}" Width="160">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type vm:MergeViewModel}">
+                                    <DataTemplate>
                                         <TextBox Text="{Binding Selection, Mode=OneWay}"
                                                  materialDesign:HintAssist.Hint="{DynamicResource Common.PageSelectionHint}"
                                                  Style="{StaticResource MaterialDesignTextBox}"/>

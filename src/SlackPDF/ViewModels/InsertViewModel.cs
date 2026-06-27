@@ -22,19 +22,36 @@ public partial class InsertViewModel : BaseOperationViewModel
 
     public InsertViewModel(PdfOperations ops) : base(ops) { }
 
+    public void SetBaseFile(string path)
+    {
+        BaseFilePath = path;
+        BaseFileName = Path.GetFileName(path);
+        try
+        {
+            using var doc = PdfSharp.Pdf.IO.PdfReader.Open(path, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
+            BasePageCount = doc.PageCount;
+        }
+        catch { BasePageCount = 0; }
+    }
+
+    public void SetInsertFile(string path)
+    {
+        InsertFilePath = path;
+        InsertFileName = Path.GetFileName(path);
+        try
+        {
+            using var doc = PdfSharp.Pdf.IO.PdfReader.Open(path, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
+            InsertPageCount = doc.PageCount;
+        }
+        catch { InsertPageCount = 0; }
+    }
+
     [RelayCommand]
     private void BrowseBase()
     {
         var dlg = new OpenFileDialog { Filter = "PDF files (*.pdf)|*.pdf" };
         if (dlg.ShowDialog() != true) return;
-        BaseFilePath = dlg.FileName;
-        BaseFileName = Path.GetFileName(dlg.FileName);
-        try
-        {
-            using var doc = PdfSharp.Pdf.IO.PdfReader.Open(dlg.FileName, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
-            BasePageCount = doc.PageCount;
-        }
-        catch { BasePageCount = 0; }
+        SetBaseFile(dlg.FileName);
     }
 
     [RelayCommand]
@@ -42,14 +59,7 @@ public partial class InsertViewModel : BaseOperationViewModel
     {
         var dlg = new OpenFileDialog { Filter = "PDF files (*.pdf)|*.pdf" };
         if (dlg.ShowDialog() != true) return;
-        InsertFilePath = dlg.FileName;
-        InsertFileName = Path.GetFileName(dlg.FileName);
-        try
-        {
-            using var doc = PdfSharp.Pdf.IO.PdfReader.Open(dlg.FileName, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
-            InsertPageCount = doc.PageCount;
-        }
-        catch { InsertPageCount = 0; }
+        SetInsertFile(dlg.FileName);
     }
 
     [RelayCommand]

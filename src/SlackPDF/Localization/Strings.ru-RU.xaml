@@ -77,6 +77,11 @@
   <sys:String x:Key="Rotate.Overwrite">Перезаписать оригинал</sys:String>
   <sys:String x:Key="Rotate.OverwriteWarning">Внимание: оригинальный файл будет заменён!</sys:String>
   <sys:String x:Key="Rotate.ApplyTo">Применить к</sys:String>
+  <sys:String x:Key="Rotate.PickPages">Выбрать страницы…</sys:String>
+  <sys:String x:Key="Rotate.Picker.Title">Выберите страницы для поворота</sys:String>
+  <sys:String x:Key="Rotate.Picker.SelectAll">Выбрать все</sys:String>
+  <sys:String x:Key="Rotate.Picker.ClearAll">Очистить</sys:String>
+  <sys:String x:Key="Rotate.Picker.Apply">Применить</sys:String>
 
   <!-- Извлечение -->
   <sys:String x:Key="Extract.Title">Извлечь страницы</sys:String>
@@ -101,6 +106,7 @@
   <sys:String x:Key="Composer.AddDocument">Добавить документ</sys:String>
   <sys:String x:Key="Composer.DropHere">Перетащи страницы сюда для сборки документа</sys:String>
   <sys:String x:Key="Composer.ClearConfirm">Очистить все страницы из сборки?</sys:String>
+  <sys:String x:Key="Composer.AutoOrderConfirm">Отсортировать все страницы по документу и номеру?</sys:String>
   <sys:String x:Key="Composer.AutoOrder">Авто-порядок</sys:String>
   <sys:String x:Key="Composer.SavePdf">Сохранить PDF</sys:String>
   <sys:String x:Key="Composer.PageCount">{0} стр. в сборке</sys:String>

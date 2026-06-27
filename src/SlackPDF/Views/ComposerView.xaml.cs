@@ -17,6 +17,10 @@ public partial class ComposerView : UserControl
     private int _insertionIndex = -1;
     private InsertAdorner? _insertAdorner;
 
+    // Assembly reorder state
+    private ComposerPage? _assemblyDragSource;
+    private Point _assemblyDragStartPos;
+
     public ComposerView()
     {
         InitializeComponent();
@@ -136,11 +140,101 @@ public partial class ComposerView : UserControl
         _dragSource = null;
     }
 
+    // ─── Toolbar confirmation dialogs ──────────────────────────────────────
+
+    private void ClearAll_Click(object sender, RoutedEventArgs e)
+    {
+        string msg = Application.Current.TryFindResource("Composer.ClearConfirm") as string
+            ?? "Clear all pages from the assembly?";
+        if (MessageBox.Show(msg, "SlackPDF", MessageBoxButton.OKCancel, MessageBoxImage.Question)
+            == MessageBoxResult.OK && DataContext is ComposerViewModel vm)
+            vm.ClearAllCommand.Execute(null);
+    }
+
+    private void AutoOrder_Click(object sender, RoutedEventArgs e)
+    {
+        string msg = Application.Current.TryFindResource("Composer.AutoOrderConfirm") as string
+            ?? "Sort all pages by document label and page number?";
+        if (MessageBox.Show(msg, "SlackPDF", MessageBoxButton.OKCancel, MessageBoxImage.Question)
+            == MessageBoxResult.OK && DataContext is ComposerViewModel vm)
+            vm.AutoOrderCommand.Execute(null);
+    }
+
+    // ─── Source panel: Explorer drop (adds new document) ───────────────────
+
+    private void SourcePanel_DragOver(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            e.Effects = files.Any(f => f.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+        else
+        {
+            e.Effects = DragDropEffects.None;
+        }
+        e.Handled = true;
+    }
+
+    private async void SourcePanel_Drop(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetData(DataFormats.FileDrop) is not string[] files) return;
+        if (DataContext is not ComposerViewModel vm) return;
+
+        vm.IsLoadingDocuments = true;
+        try
+        {
+            ComposerDocument? firstAdded = null;
+            foreach (var f in files.Where(f => f.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase)))
+            {
+                var doc = await vm.AddDocumentFromFileAsync(f);
+                firstAdded ??= doc;
+            }
+            if (firstAdded != null)
+                vm.ActiveDocument = firstAdded;
+        }
+        finally
+        {
+            vm.IsLoadingDocuments = false;
+        }
+    }
+
+    // ─── Assembly reorder drag ──────────────────────────────────────────────
+
+    private void AssemblyThumb_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is FrameworkElement fe && fe.DataContext is ComposerPage page)
+        {
+            _assemblyDragStartPos = e.GetPosition(null);
+            _assemblyDragSource = page;
+            e.Handled = true;
+        }
+    }
+
+    private void AssemblyThumb_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (e.LeftButton != MouseButtonState.Pressed || _assemblyDragSource == null) return;
+        if (sender is not UIElement element) return;
+
+        Point pos = e.GetPosition(null);
+        if (Math.Abs(pos.X - _assemblyDragStartPos.X) < SystemParameters.MinimumHorizontalDragDistance &&
+            Math.Abs(pos.Y - _assemblyDragStartPos.Y) < SystemParameters.MinimumVerticalDragDistance)
+            return;
+
+        var page = _assemblyDragSource;
+        _assemblyDragSource = null;
+        DragDrop.DoDragDrop(element, new DataObject("SlackPdfReorder", page), DragDropEffects.Move);
+    }
+
     // ─── Assembly drop zone ─────────────────────────────────────────────────
 
     private void Assembly_DragOver(object sender, DragEventArgs e)
     {
-        if (!e.Data.GetDataPresent("SlackPdfPages"))
+        bool hasPages = e.Data.GetDataPresent("SlackPdfPages");
+        bool hasReorder = e.Data.GetDataPresent("SlackPdfReorder");
+
+        if (!hasPages && !hasReorder)
         {
             e.Effects = DragDropEffects.None;
             HideInsertAdorner();
@@ -148,7 +242,7 @@ public partial class ComposerView : UserControl
             return;
         }
 
-        e.Effects = DragDropEffects.Copy;
+        e.Effects = hasReorder ? DragDropEffects.Move : DragDropEffects.Copy;
 
         var panel = GetAssemblyWrapPanel();
         if (panel != null)
@@ -176,12 +270,26 @@ public partial class ComposerView : UserControl
     private void Assembly_Drop(object sender, DragEventArgs e)
     {
         HideInsertAdorner();
-        if (e.Data.GetData("SlackPdfPages") is not List<PageDragItem> pages) return;
         if (DataContext is not ComposerViewModel vm) return;
 
         int idx = _insertionIndex >= 0 ? _insertionIndex : vm.ComposedPages.Count;
-        foreach (var p in pages)
-            vm.InsertPage(p.FilePath, p.PageIndex, idx++);
+
+        if (e.Data.GetData("SlackPdfReorder") is ComposerPage reorderPage)
+        {
+            int fromIdx = vm.ComposedPages.IndexOf(reorderPage);
+            if (fromIdx >= 0)
+            {
+                int toIdx = idx > fromIdx ? idx - 1 : idx;
+                toIdx = Math.Max(0, Math.Min(vm.ComposedPages.Count - 1, toIdx));
+                if (fromIdx != toIdx)
+                    vm.ComposedPages.Move(fromIdx, toIdx);
+            }
+        }
+        else if (e.Data.GetData("SlackPdfPages") is List<PageDragItem> pages)
+        {
+            foreach (var p in pages)
+                vm.InsertPage(p.FilePath, p.PageIndex, idx++);
+        }
 
         _insertionIndex = -1;
     }
