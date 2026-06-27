@@ -120,6 +120,10 @@ All components are released under the MIT license, compatible with GPL v3.
 | [MaterialDesignThemes](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit) | UI components and theme | MIT |
 | [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) | MVVM infrastructure | MIT |
 
+## Documentation
+
+📖 [User Guide](docs/user-guide.en.md) — all modules explained with examples
+
 ## Contributing
 
 PRs and issues are welcome! See [CONTRIBUTING.md](docs/CONTRIBUTING.md).
