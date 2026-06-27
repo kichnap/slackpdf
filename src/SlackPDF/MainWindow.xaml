@@ -195,7 +195,7 @@
                            Opacity="0.8"/>
 
                 <ProgressBar Grid.Column="1"
-                             Value="{Binding CurrentView.Progress}"
+                             IsIndeterminate="True"
                              Height="4"
                              Margin="16,0"
                              Visibility="{Binding CurrentView.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -208,6 +208,22 @@
                 </TextBlock>
             </Grid>
         </Border>
+
+        <!-- Full-window busy overlay — dims everything and blocks all input while an operation runs.
+             Covers both nav rail and content. Visibility collapses automatically when not busy. -->
+        <Grid Grid.Column="0" Grid.ColumnSpan="2"
+              Grid.Row="0" Grid.RowSpan="2"
+              Panel.ZIndex="100"
+              Background="#99000000"
+              Visibility="{Binding CurrentView.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                         IsIndeterminate="True"
+                         Value="0"
+                         Width="64" Height="64"
+                         Foreground="White"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+        </Grid>
 
     </Grid>
 </Window>

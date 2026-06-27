@@ -54,7 +54,8 @@ public abstract partial class BaseOperationViewModel : ObservableObject
         try
         {
             var prog = new Progress<int>(p => Progress = p);
-            var result = await operation(prog, _cts.Token);
+            // Run on a thread-pool thread so the UI stays responsive
+            var result = await Task.Run(async () => await operation(prog, _cts.Token));
 
             if (result.Success)
             {
