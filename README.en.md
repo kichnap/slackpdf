@@ -41,9 +41,9 @@ cd slackpdf
 dotnet restore
 ```
 
-### Run in development mode
+### Quick run (development)
 
-Starts the app directly without packaging. Fast iteration — no installer needed.
+Starts the app directly without packaging. The fastest way to test changes.
 
 ```bash
 dotnet run --project src/SlackPDF
@@ -51,32 +51,29 @@ dotnet run --project src/SlackPDF
 
 ### Build (debug)
 
-Compiles to `src/SlackPDF/bin/Debug/net9.0-windows/`. The `.exe` requires .NET 9 installed on the target machine.
+Compiles to `src/SlackPDF/bin/Debug/net9.0-windows/win-x64/`. Self-contained — no .NET installation required.
 
 ```bash
 dotnet build
 ```
 
-### Build (release, framework-dependent)
+### Build (release)
 
-Smaller output, but requires .NET 9 to be installed on the target machine.
-
-```bash
-dotnet build --configuration Release
-```
-
-### Publish (self-contained single file) — for distribution
-
-Produces one standalone `SlackPDF.exe` in `publish/` that runs on any Windows 10/11 x64 machine without .NET installed.
+Compiles to `src/SlackPDF/bin/Release/net9.0-windows/win-x64/`. Self-contained, with optimizations.
 
 ```bash
-dotnet publish src/SlackPDF/SlackPDF.csproj `
-  -c Release `
-  -r win-x64 `
-  --self-contained true `
-  -p:PublishSingleFile=true `
-  -o publish/
+dotnet build -c Release
 ```
+
+### Publish — for distribution
+
+Produces one standalone `SlackPDF.exe` in `publish/`. Used to build the installer.
+
+```bash
+dotnet publish src/SlackPDF/SlackPDF.csproj -c Release -o publish/
+```
+
+> All parameters (`self-contained`, `win-x64`, `PublishSingleFile`) are already set in `.csproj` — no need to repeat them on the command line.
 
 ### Run tests
 
@@ -84,13 +81,24 @@ dotnet publish src/SlackPDF/SlackPDF.csproj `
 dotnet test
 ```
 
-### Build installer (requires [Inno Setup](https://jrsoftware.org/isinfo.php))
+### Build installer (requires [Inno Setup 6](https://jrsoftware.org/isinfo.php))
 
-First publish the self-contained build (see above), then:
+First publish (see above), then:
 
 ```bash
+# If Inno Setup is on PATH:
 iscc installer/SlackPDF.iss
+
+# Or via full path:
+& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\SlackPDF.iss
+
 # Output: installer/Output/SlackPDF-Setup-1.0.0.exe
+```
+
+Or use the script that does publish + installer in one step:
+
+```powershell
+.\build.ps1
 ```
 
 ## Why SlackPDF?

@@ -41,9 +41,9 @@ cd slackpdf
 dotnet restore
 ```
 
-### Запуск в режиме разработки
+### Быстрый запуск (разработка)
 
-Запускает приложение напрямую без упаковки. Быстрая итерация — инсталлятор не нужен.
+Запускает приложение напрямую, без упаковки. Самый быстрый способ проверить изменения.
 
 ```bash
 dotnet run --project src/SlackPDF
@@ -51,32 +51,29 @@ dotnet run --project src/SlackPDF
 
 ### Сборка (debug)
 
-Компилирует в `src/SlackPDF/bin/Debug/net9.0-windows/`. Для запуска `.exe` на целевой машине требуется установленный .NET 9.
+Компилирует в `src/SlackPDF/bin/Debug/net9.0-windows/win-x64/`. Self-contained — установленный .NET не нужен.
 
 ```bash
 dotnet build
 ```
 
-### Сборка (release, framework-dependent)
+### Сборка (release)
 
-Меньше по размеру, но требует установленного .NET 9 на целевой машине.
-
-```bash
-dotnet build --configuration Release
-```
-
-### Публикация (self-contained, один файл) — для дистрибуции
-
-Создаёт один автономный `SlackPDF.exe` в папке `publish/`. Работает на любом Windows 10/11 x64 без установки .NET.
+Компилирует в `src/SlackPDF/bin/Release/net9.0-windows/win-x64/`. Self-contained, с оптимизациями.
 
 ```bash
-dotnet publish src/SlackPDF/SlackPDF.csproj `
-  -c Release `
-  -r win-x64 `
-  --self-contained true `
-  -p:PublishSingleFile=true `
-  -o publish/
+dotnet build -c Release
 ```
+
+### Публикация — для дистрибуции
+
+Создаёт один автономный `SlackPDF.exe` в папке `publish/`. Используется для сборки инсталлятора.
+
+```bash
+dotnet publish src/SlackPDF/SlackPDF.csproj -c Release -o publish/
+```
+
+> Все параметры (`self-contained`, `win-x64`, `PublishSingleFile`) уже заданы в `.csproj` — дублировать их в командной строке не нужно.
 
 ### Запуск тестов
 
@@ -84,19 +81,24 @@ dotnet publish src/SlackPDF/SlackPDF.csproj `
 dotnet test
 ```
 
-### Запуск бенчмарков (PDFsharp vs iText)
-
-```bash
-dotnet run --project src/SlackPDF.Tests -c Release -- --filter "*Merge*"
-```
-
-### Сборка инсталлятора (требует [Inno Setup](https://jrsoftware.org/isinfo.php))
+### Сборка инсталлятора (требует [Inno Setup 6](https://jrsoftware.org/isinfo.php))
 
 Сначала выполни публикацию (см. выше), затем:
 
 ```bash
+# Если Inno Setup добавлен в PATH:
 iscc installer/SlackPDF.iss
+
+# Или через полный путь:
+& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\SlackPDF.iss
+
 # Результат: installer/Output/SlackPDF-Setup-1.0.0.exe
+```
+
+Либо используй скрипт, который делает publish + installer за один шаг:
+
+```powershell
+.\build.ps1
 ```
 
 ## Зачем SlackPDF?

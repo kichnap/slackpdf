@@ -9,10 +9,14 @@
     <AssemblyName>SlackPDF</AssemblyName>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <Version>1.0.0</Version>
-    <Authors>SlackPDF Contributors</Authors>
-    <Description>Fast, free, open-source PDF split/merge tool</Description>
-    <Copyright>Copyright © 2025 SlackPDF Contributors</Copyright>
+    <Authors>kichnap</Authors>
+    <Company>kichnap</Company>
+    <Description>Fast, free, open-source PDF toolkit for Windows</Description>
+    <Copyright>Copyright © 2026 kichnap</Copyright>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/kichnap/slackpdf</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <NeutralLanguage>ru-RU</NeutralLanguage>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishSingleFile>true</PublishSingleFile>

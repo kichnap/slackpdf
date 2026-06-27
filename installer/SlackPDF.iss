@@ -1,6 +1,6 @@
 #define AppName "SlackPDF"
 #define AppVersion "1.0.0"
-#define AppPublisher "SlackPDF Contributors"
+#define AppPublisher "kichnap"
 #define AppURL "https://github.com/kichnap/slackpdf"
 #define AppExeName "SlackPDF.exe"
 
@@ -20,6 +20,9 @@ SolidCompression=yes
 WizardStyle=modern
 LicenseFile=..\LICENSE
 ArchitecturesInstallIn64BitMode=x64compatible
+; Allow install without admin rights (per-user) or with UAC (per-machine)
+PrivilegesRequired=lowest
+PrivilegesRequiredOverridesAllowed=dialog
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
