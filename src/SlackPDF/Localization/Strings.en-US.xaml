@@ -25,6 +25,9 @@
   <sys:String x:Key="Common.Error">Error: {0}</sys:String>
   <sys:String x:Key="Common.Pages">pages</sys:String>
   <sys:String x:Key="Common.DropFilesHere">Drop PDF files here or click Add files</sys:String>
+  <sys:String x:Key="Common.InputFile">Input PDF file</sys:String>
+  <sys:String x:Key="Common.PageCountPrefix">Pages:</sys:String>
+  <sys:String x:Key="Common.Column.File">File</sys:String>
 
   <!-- Merge -->
   <sys:String x:Key="Merge.Title">Merge PDF files</sys:String>
@@ -37,6 +40,11 @@
   <sys:String x:Key="Merge.AcroForms.Merge">Merge</sys:String>
   <sys:String x:Key="Merge.AcroForms.MergeRename">Merge with renamed fields</sys:String>
   <sys:String x:Key="Merge.TOC">Add table of contents</sys:String>
+  <sys:String x:Key="Merge.Column.Pages">Pages</sys:String>
+  <sys:String x:Key="Merge.Column.Size">Size</sys:String>
+  <sys:String x:Key="Merge.MoveUp">Move up</sys:String>
+  <sys:String x:Key="Merge.MoveDown">Move down</sys:String>
+  <sys:String x:Key="Merge.Remove">Remove</sys:String>
 
   <!-- Split -->
   <sys:String x:Key="Split.Title">Split PDF</sys:String>
@@ -50,12 +58,14 @@
   <sys:String x:Key="Split.Prefix">File name prefix</sys:String>
   <sys:String x:Key="Split.NPages">Pages per file</sys:String>
   <sys:String x:Key="Split.AtPagesHint">e.g. 5, 10, 15</sys:String>
+  <sys:String x:Key="Split.ModeTitle">Split mode</sys:String>
 
   <!-- Mix -->
   <sys:String x:Key="Mix.Title">Mix PDF pages</sys:String>
   <sys:String x:Key="Mix.Straight">Straight order</sys:String>
   <sys:String x:Key="Mix.Reverse">Reverse order</sys:String>
   <sys:String x:Key="Mix.Description">Interleave pages from two or more PDFs. Perfect for single-sided scans.</sys:String>
+  <sys:String x:Key="Mix.Column.Order">Order</sys:String>
 
   <!-- Rotate -->
   <sys:String x:Key="Rotate.Title">Rotate pages</sys:String>
@@ -66,6 +76,7 @@
   <sys:String x:Key="Rotate.Selection">Page selection</sys:String>
   <sys:String x:Key="Rotate.Overwrite">Overwrite original</sys:String>
   <sys:String x:Key="Rotate.OverwriteWarning">Warning: this will replace the original file!</sys:String>
+  <sys:String x:Key="Rotate.ApplyTo">Apply to</sys:String>
 
   <!-- Extract -->
   <sys:String x:Key="Extract.Title">Extract pages</sys:String>
@@ -73,6 +84,7 @@
   <sys:String x:Key="Extract.OnePerPage">One file per page</sys:String>
   <sys:String x:Key="Extract.OnePerRange">One file per range</sys:String>
   <sys:String x:Key="Extract.OutputMode">Output mode</sys:String>
+  <sys:String x:Key="Extract.AllPagesHint">Leave empty to select all pages</sys:String>
 
   <!-- Insert -->
   <sys:String x:Key="Insert.Title">Insert pages</sys:String>
@@ -100,6 +112,9 @@
   <sys:String x:Key="Composer.Menu.Duplicate">Duplicate</sys:String>
   <sys:String x:Key="Composer.Sources">Source documents</sys:String>
   <sys:String x:Key="Composer.Assembly">Document assembly</sys:String>
+  <sys:String x:Key="Composer.DocInfo.Pages">Pages:</sys:String>
+  <sys:String x:Key="Composer.DocInfo.Size">Size:</sys:String>
+  <sys:String x:Key="Composer.DocInfo.PdfVersion">PDF version:</sys:String>
 
   <!-- Settings -->
   <sys:String x:Key="Settings.Title">Settings</sys:String>
@@ -111,6 +126,10 @@
   <sys:String x:Key="Settings.ThumbnailCache">Thumbnail cache folder</sys:String>
   <sys:String x:Key="Settings.ClearCache">Clear thumbnail cache</sys:String>
   <sys:String x:Key="Settings.About">About SlackPDF</sys:String>
+  <sys:String x:Key="Settings.GitHub">GitHub — github.com/kichnap/slackpdf</sys:String>
+  <sys:String x:Key="Settings.CacheCleared">Thumbnail cache cleared.</sys:String>
   <sys:String x:Key="Settings.Version">Version 1.0.0 — GPL v3 — Free &amp; Open Source</sys:String>
+  <sys:String x:Key="Settings.OpenSource">Open-source components</sys:String>
+  <sys:String x:Key="MainWindow.Engine">Engine:</sys:String>
 
 </ResourceDictionary>

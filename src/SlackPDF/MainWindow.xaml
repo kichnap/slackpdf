@@ -29,9 +29,17 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Navigation Rail -->
+        <!-- Navigation Rail: hardcoded DeepPurple 800 so it stays dark in both light and dark themes -->
         <Border Grid.Column="0" Grid.RowSpan="2"
-                Background="{DynamicResource PrimaryHueDarkBrush}">
+                Background="#4527A0">
+            <Border.Resources>
+                <Style TargetType="materialDesign:PackIcon">
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+            </Border.Resources>
             <StackPanel VerticalAlignment="Top" Margin="0,16,0,0">
 
                 <Button Style="{StaticResource MaterialDesignIconButton}"
@@ -193,11 +201,11 @@
                              Visibility="{Binding CurrentView.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
                              Style="{StaticResource MaterialDesignLinearProgressBar}"/>
 
-                <TextBlock Grid.Column="2"
-                           Text="{Binding ActiveEngineName, StringFormat='Engine: {0}'}"
-                           VerticalAlignment="Center"
-                           FontSize="12"
-                           Opacity="0.6"/>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center" FontSize="12" Opacity="0.6">
+                    <Run Text="{DynamicResource MainWindow.Engine}"/>
+                    <Run Text=" "/>
+                    <Run Text="{Binding ActiveEngineName, Mode=OneWay}"/>
+                </TextBlock>
             </Grid>
         </Border>
 

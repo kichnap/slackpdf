@@ -19,15 +19,18 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Margin="0,0,8,0">
                         <TextBox Text="{Binding InputFileName}"
-                                 materialDesign:HintAssist.Hint="Input PDF file"
+                                 materialDesign:HintAssist.Hint="{DynamicResource Common.InputFile}"
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                  IsReadOnly="True"/>
-                        <TextBlock Text="{Binding InputPageCount, StringFormat='Pages: {0}'}"
-                                   Margin="0,4,0,0" Opacity="0.6" FontSize="12"/>
+                        <TextBlock Margin="0,4,0,0" Opacity="0.6" FontSize="12">
+                            <Run Text="{DynamicResource Common.PageCountPrefix}"/>
+                            <Run Text=" "/>
+                            <Run Text="{Binding InputPageCount, Mode=OneWay}"/>
+                        </TextBlock>
                     </StackPanel>
                     <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
                             Command="{Binding BrowseInputCommand}"
-                            Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
+                            Style="{StaticResource MaterialDesignRaisedButton}" VerticalAlignment="Bottom"/>
                 </Grid>
             </materialDesign:Card>
 
@@ -50,7 +53,7 @@
             <!-- Page selection -->
             <materialDesign:Card Padding="16" Margin="0,0,0,16">
                 <StackPanel>
-                    <TextBlock Text="Apply to" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+                    <TextBlock Text="{DynamicResource Rotate.ApplyTo}" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
                     <RadioButton Content="{DynamicResource Rotate.AllPages}"
                                  IsChecked="{Binding PageSelectionMode, Converter={StaticResource StringEqualsToBoolConverter}, ConverterParameter=All}"
                                  Style="{StaticResource MaterialDesignRadioButton}" Margin="0,4"/>
@@ -92,7 +95,7 @@
                                  IsReadOnly="True" Margin="0,0,8,0"/>
                         <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
                                 Command="{Binding BrowseOutputCommand}"
-                                Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
+                                Style="{StaticResource MaterialDesignRaisedButton}" VerticalAlignment="Bottom"/>
                     </Grid>
                 </StackPanel>
             </materialDesign:Card>

@@ -70,23 +70,38 @@ public class ThumbnailService : IDisposable
     {
         try
         {
-            var options = new RenderOptions(Dpi: 72);
-            var images = Conversion.ToImages(filePath, null, options);
-            using var skBitmap = images.Skip(pageIndex).FirstOrDefault();
-            if (skBitmap == null) return null;
+            var options = new RenderOptions(Dpi: 96);
+            var pdfBytes = File.ReadAllBytes(filePath);
+            SKBitmap? targetBitmap = null;
+            int idx = 0;
+            foreach (var bitmap in Conversion.ToImages(pdfBytes, null, options))
+            {
+                if (idx == pageIndex)
+                {
+                    targetBitmap = bitmap;
+                    break;
+                }
+                bitmap.Dispose();
+                idx++;
+            }
 
-            using var scaled = skBitmap.Resize(new SKImageInfo(width, height), SKFilterQuality.Medium);
-            using var image = SKImage.FromBitmap(scaled);
-            using var data = image.Encode(SKEncodedImageFormat.Png, 85);
+            if (targetBitmap == null) return null;
 
-            var ms = new MemoryStream(data.ToArray());
-            var bmp = new BitmapImage();
-            bmp.BeginInit();
-            bmp.StreamSource = ms;
-            bmp.CacheOption = BitmapCacheOption.OnLoad;
-            bmp.EndInit();
-            bmp.Freeze();
-            return bmp;
+            using (targetBitmap)
+            {
+                using var scaled = targetBitmap.Resize(new SKImageInfo(width, height), SKFilterQuality.Medium);
+                using var image = SKImage.FromBitmap(scaled);
+                using var data = image.Encode(SKEncodedImageFormat.Png, 85);
+
+                var ms = new MemoryStream(data.ToArray());
+                var bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.StreamSource = ms;
+                bmp.CacheOption = BitmapCacheOption.OnLoad;
+                bmp.EndInit();
+                bmp.Freeze();
+                return bmp;
+            }
         }
         catch
         {

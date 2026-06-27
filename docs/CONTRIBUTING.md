@@ -20,7 +20,7 @@ Requirements:
 - Visual Studio 2022+ or VS Code with C# extension
 
 ```bash
-git clone https://github.com/<owner>/slackpdf.git
+git clone https://github.com/kichnap/slackpdf.git
 cd slackpdf
 dotnet restore
 dotnet build

@@ -17,11 +17,23 @@ public partial class MergeViewModel : BaseOperationViewModel
 
     public MergeViewModel(PdfOperations ops) : base(ops) { }
 
-    public IEnumerable<BookmarkBehavior> BookmarkOptions
-        => Enum.GetValues<BookmarkBehavior>();
+    public int SelectedBookmarkIndex
+    {
+        get => (int)SelectedBookmarks;
+        set => SelectedBookmarks = (BookmarkBehavior)value;
+    }
 
-    public IEnumerable<AcroFormBehavior> AcroFormOptions
-        => Enum.GetValues<AcroFormBehavior>();
+    public int SelectedAcroFormIndex
+    {
+        get => (int)SelectedAcroForms;
+        set => SelectedAcroForms = (AcroFormBehavior)value;
+    }
+
+    partial void OnSelectedBookmarksChanged(BookmarkBehavior value)
+        => OnPropertyChanged(nameof(SelectedBookmarkIndex));
+
+    partial void OnSelectedAcroFormsChanged(AcroFormBehavior value)
+        => OnPropertyChanged(nameof(SelectedAcroFormIndex));
 
     [RelayCommand]
     private void AddFiles()

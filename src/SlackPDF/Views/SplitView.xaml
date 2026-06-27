@@ -20,16 +20,19 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Margin="0,0,8,0">
                         <TextBox Text="{Binding InputFileName}"
-                                 materialDesign:HintAssist.Hint="Input PDF file"
+                                 materialDesign:HintAssist.Hint="{DynamicResource Common.InputFile}"
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                  IsReadOnly="True"/>
-                        <TextBlock Text="{Binding InputPageCount, StringFormat='Pages: {0}'}"
-                                   Margin="0,4,0,0" Opacity="0.6" FontSize="12"
-                                   Visibility="{Binding InputPageCount, Converter={StaticResource IsNonZeroToVisibilityConverter}}"/>
+                        <TextBlock Margin="0,4,0,0" Opacity="0.6" FontSize="12"
+                                   Visibility="{Binding InputPageCount, Converter={StaticResource IsNonZeroToVisibilityConverter}}">
+                            <Run Text="{DynamicResource Common.PageCountPrefix}"/>
+                            <Run Text=" "/>
+                            <Run Text="{Binding InputPageCount, Mode=OneWay}"/>
+                        </TextBlock>
                     </StackPanel>
                     <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
                             Command="{Binding BrowseInputCommand}"
-                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
                             VerticalAlignment="Bottom"/>
                 </Grid>
             </materialDesign:Card>
@@ -37,7 +40,7 @@
             <!-- Split mode -->
             <materialDesign:Card Padding="16" Margin="0,0,0,16">
                 <StackPanel>
-                    <TextBlock Text="Split mode" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
+                    <TextBlock Text="{DynamicResource Split.ModeTitle}" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
 
                     <RadioButton Content="{DynamicResource Split.EveryPage}"
                                  IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=EveryPage}"
@@ -89,7 +92,7 @@
                                  IsReadOnly="True" Margin="0,0,8,0"/>
                         <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
                                 Command="{Binding BrowseOutputFolderCommand}"
-                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
                                 VerticalAlignment="Bottom"/>
                     </Grid>
                     <TextBox Text="{Binding FileNamePrefix}"

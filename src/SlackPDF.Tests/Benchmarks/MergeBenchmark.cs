@@ -15,7 +15,6 @@ public class MergeBenchmark : IDisposable
     private readonly string _file2;
     private readonly string _file3;
     private readonly PdfSharpEngine _pdfSharp = new();
-    private readonly ITextEngine    _iText    = new();
     private readonly MergeOptions   _options  = new(BookmarkBehavior.Discard, AcroFormBehavior.Discard, false);
 
     public MergeBenchmark()
@@ -42,14 +41,6 @@ public class MergeBenchmark : IDisposable
         var output = Path.Combine(_tempDir, $"out_{Guid.NewGuid():N}.pdf");
         var inputs = new[] { (_file1, PageSelection.All), (_file2, PageSelection.All), (_file3, PageSelection.All) };
         await _pdfSharp.MergeAsync(inputs, output, _options, null!, CancellationToken.None);
-    }
-
-    [Benchmark]
-    public async Task ITextMerge()
-    {
-        var output = Path.Combine(_tempDir, $"out_{Guid.NewGuid():N}.pdf");
-        var inputs = new[] { (_file1, PageSelection.All), (_file2, PageSelection.All), (_file3, PageSelection.All) };
-        await _iText.MergeAsync(inputs, output, _options, null!, CancellationToken.None);
     }
 
     public void Dispose()

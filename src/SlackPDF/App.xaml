@@ -20,6 +20,8 @@
             <converters:StringEqualsToBoolConverter       x:Key="StringEqualsToBoolConverter"/>
             <converters:BoolToThicknessConverter          x:Key="BoolToThicknessConverter"/>
             <converters:PageIndexToNumberConverter        x:Key="PageIndexToNumberConverter"/>
+            <converters:IsNullToVisibilityConverter       x:Key="IsNullToVisibilityConverter"/>
+            <converters:IsNotNullToVisibilityConverter    x:Key="IsNotNullToVisibilityConverter"/>
             <BooleanToVisibilityConverter                 x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>

@@ -1,38 +1,38 @@
 <div align="center">
   <h1>SlackPDF</h1>
-  <p>Fast, free, open-source PDF toolkit for Windows</p>
+  <p>Быстрый, бесплатный, open-source инструмент для работы с PDF на Windows</p>
 
   [![Build](https://github.com/kichnap/slackpdf/actions/workflows/build.yml/badge.svg)](https://github.com/kichnap/slackpdf/actions)
-  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-  [![Release](https://img.shields.io/github/v/release/kichnap/slackpdf)](https://github.com/kichnap/slackpdf/releases/latest)
-  [![Downloads](https://img.shields.io/github/downloads/kichnap/slackpdf/total)](https://github.com/kichnap/slackpdf/releases)
+  [![Лицензия: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+  [![Релиз](https://img.shields.io/github/v/release/kichnap/slackpdf)](https://github.com/kichnap/slackpdf/releases/latest)
+  [![Скачивания](https://img.shields.io/github/downloads/kichnap/slackpdf/total)](https://github.com/kichnap/slackpdf/releases)
 
-  **[🇷🇺 Читать на русском](README.ru.md)**
+  **[🇬🇧 Read in English](README.en.md)**
 </div>
 
 ---
 
-## Features
+## Возможности
 
-| Module | Description |
+| Модуль | Описание |
 |---|---|
-| **Merge** | Combine PDFs with per-file page ranges, bookmark and AcroForm handling, table of contents |
-| **Split** | Split by page, every N pages, at specific pages, by file size, or by bookmark level |
-| **Mix** | Interleave pages from two or more PDFs — perfect for single-sided scans |
-| **Rotate** | Rotate all, even, odd, or selected pages by 90 / 180 / 270° |
-| **Extract** | Extract single pages or ranges into a new PDF |
-| **Insert** | Insert a PDF (or its pages) into another at any position or periodically |
-| **Visual Composer** ⭐ | Drag page thumbnails from multiple documents and arrange them freely into a new PDF |
+| **Объединить** | Склеить PDF с выбором диапазонов страниц, обработкой закладок, AcroForms и оглавлением |
+| **Разделить** | Разбить по страницам, каждые N страниц, по номерам, по размеру файла или по закладкам |
+| **Чередование** | Перемежать страницы из нескольких PDF — идеально для односторонних сканов |
+| **Поворот** | Повернуть все, чётные, нечётные или выбранные страницы на 90 / 180 / 270° |
+| **Извлечь** | Извлечь отдельные страницы или диапазоны в новый PDF |
+| **Вставить** | Вставить один PDF внутрь другого в заданную позицию или с заданной периодичностью |
+| **Визуальный сборщик** ⭐ | Перетаскивай миниатюры страниц из нескольких документов и собирай новый PDF в произвольном порядке |
 
-## Download
+## Скачать
 
-👉 **[Latest release](https://github.com/kichnap/slackpdf/releases/latest)** — download `SlackPDF-Setup-x.x.x.exe`
+👉 **[Последний релиз](https://github.com/kichnap/slackpdf/releases/latest)** — скачать `SlackPDF-Setup-x.x.x.exe`
 
-Windows 10 / 11 x64. No .NET installation required (self-contained).
+Windows 10 / 11 x64. Установка .NET не требуется (self-contained).
 
-## Build from source
+## Сборка из исходников
 
-**Requirements:** [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0), Windows 10/11 x64
+**Требования:** [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0), Windows 10/11 x64
 
 ```bash
 git clone https://github.com/kichnap/slackpdf.git
@@ -40,33 +40,33 @@ cd slackpdf
 dotnet restore
 ```
 
-### Run in development mode
+### Запуск в режиме разработки
 
-Starts the app directly without packaging. Fast iteration — no installer needed.
+Запускает приложение напрямую без упаковки. Быстрая итерация — инсталлятор не нужен.
 
 ```bash
 dotnet run --project src/SlackPDF
 ```
 
-### Build (debug)
+### Сборка (debug)
 
-Compiles to `src/SlackPDF/bin/Debug/net9.0-windows/`. The `.exe` requires .NET 9 installed on the target machine.
+Компилирует в `src/SlackPDF/bin/Debug/net9.0-windows/`. Для запуска `.exe` на целевой машине требуется установленный .NET 9.
 
 ```bash
 dotnet build
 ```
 
-### Build (release, framework-dependent)
+### Сборка (release, framework-dependent)
 
-Smaller output, but requires .NET 9 to be installed on the target machine.
+Меньше по размеру, но требует установленного .NET 9 на целевой машине.
 
 ```bash
 dotnet build --configuration Release
 ```
 
-### Publish (self-contained single file) — for distribution
+### Публикация (self-contained, один файл) — для дистрибуции
 
-Produces one standalone `SlackPDF.exe` in `publish/` that runs on any Windows 10/11 x64 machine without .NET installed.
+Создаёт один автономный `SlackPDF.exe` в папке `publish/`. Работает на любом Windows 10/11 x64 без установки .NET.
 
 ```bash
 dotnet publish src/SlackPDF/SlackPDF.csproj `
@@ -77,38 +77,50 @@ dotnet publish src/SlackPDF/SlackPDF.csproj `
   -o publish/
 ```
 
-### Run tests
+### Запуск тестов
 
 ```bash
 dotnet test
 ```
 
-### Run benchmarks (PDFsharp vs iText)
+### Запуск бенчмарков (PDFsharp vs iText)
 
 ```bash
 dotnet run --project src/SlackPDF.Tests -c Release -- --filter "*Merge*"
 ```
 
-### Build installer (requires [Inno Setup](https://jrsoftware.org/isinfo.php))
+### Сборка инсталлятора (требует [Inno Setup](https://jrsoftware.org/isinfo.php))
 
-First publish the self-contained build (see above), then:
+Сначала выполни публикацию (см. выше), затем:
 
 ```bash
 iscc installer/SlackPDF.iss
-# Output: installer/Output/SlackPDF-Setup-1.0.0.exe
+# Результат: installer/Output/SlackPDF-Setup-1.0.0.exe
 ```
 
-## Why SlackPDF?
+## Зачем SlackPDF?
 
-- **Free forever** — GPL v3, no ads, no telemetry, no cloud
-- **Visual Composer** — unique drag-and-drop page assembler not found in PDFsam
-- **Fast** — page operations copy PDF streams as-is, no re-encoding of graphics
-- **Lightweight** — minimal dependencies, single executable
+- **Бесплатно навсегда** — GPL v3, без рекламы, без телеметрии, без облака
+- **Визуальный сборщик** — уникальная сборка документа перетаскиванием миниатюр, которой нет в PDFsam
+- **Быстро** — операции над страницами копируют потоки PDF как есть, без перекодирования графики
+- **Легко** — минимум зависимостей, один исполняемый файл
 
-## Contributing
+## Участие в разработке
 
-PRs and issues are welcome! See [CONTRIBUTING.md](docs/CONTRIBUTING.md).
+PR и issues приветствуются! См. [CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
-## License
+## Используемые компоненты
+
+Все компоненты распространяются под лицензией MIT и совместимы с GPL v3.
+
+| Компонент | Назначение | Лицензия |
+|---|---|---|
+| [PDFsharp](https://github.com/empira/PDFsharp) | Чтение и запись PDF | MIT |
+| [PDFtoImage](https://github.com/sungaila/PDFtoImage) | Рендеринг страниц в миниатюры | MIT |
+| [SkiaSharp](https://github.com/mono/SkiaSharp) | Графический рендеринг | MIT |
+| [MaterialDesignThemes](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit) | UI-компоненты и тема | MIT |
+| [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) | MVVM-инфраструктура | MIT |
+
+## Лицензия
 
 [GNU GPL v3](LICENSE) © SlackPDF Contributors

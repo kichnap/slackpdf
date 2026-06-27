@@ -77,3 +77,23 @@ public class PageIndexToNumberConverter : IValueConverter
     public object ConvertBack(object value, Type t, object p, CultureInfo c)
         => DependencyProperty.UnsetValue;
 }
+
+[ValueConversion(typeof(object), typeof(Visibility))]
+public class IsNullToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type t, object p, CultureInfo c)
+        => value == null ? Visibility.Visible : Visibility.Collapsed;
+
+    public object ConvertBack(object value, Type t, object p, CultureInfo c)
+        => DependencyProperty.UnsetValue;
+}
+
+[ValueConversion(typeof(object), typeof(Visibility))]
+public class IsNotNullToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type t, object p, CultureInfo c)
+        => value != null ? Visibility.Visible : Visibility.Collapsed;
+
+    public object ConvertBack(object value, Type t, object p, CultureInfo c)
+        => DependencyProperty.UnsetValue;
+}

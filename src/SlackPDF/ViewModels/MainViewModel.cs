@@ -27,9 +27,7 @@ public partial class MainViewModel : ObservableObject
     public MainViewModel()
     {
         var settings = SettingsService.Load();
-        IPdfEngine engine = settings.PdfEngine == "iText"
-            ? new ITextEngine()
-            : new PdfSharpEngine();
+        IPdfEngine engine = new PdfSharpEngine();
         var ops   = new PdfOperations(engine);
         var thumbs = new ThumbnailService(settings.ThumbnailCache);
         ActiveEngineName = engine.Name;

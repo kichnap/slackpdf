@@ -33,7 +33,10 @@
                               materialDesign:DataGridAssist.CellPadding="8 4"
                               AllowDrop="True">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="File" Width="*">
+                            <DataGridTemplateColumn Width="*">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="{DynamicResource Common.Column.File}"/>
+                                </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -45,8 +48,16 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Pages" Binding="{Binding PageCount}" Width="60" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Size"  Binding="{Binding FileSizeFormatted}" Width="80" IsReadOnly="True"/>
+                            <DataGridTextColumn Binding="{Binding PageCount}" Width="60" IsReadOnly="True">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Merge.Column.Pages}"/>
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding FileSizeFormatted}" Width="80" IsReadOnly="True">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Merge.Column.Size}"/>
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
                             <DataGridTemplateColumn Header="{DynamicResource Common.PageSelection}" Width="160">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type vm:MergeViewModel}">
@@ -63,19 +74,19 @@
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     Command="{Binding DataContext.MoveUpCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                     CommandParameter="{Binding}"
-                                                    ToolTip="Move up" Width="28" Height="28">
+                                                    ToolTip="{DynamicResource Merge.MoveUp}" Width="28" Height="28">
                                                 <materialDesign:PackIcon Kind="ArrowUp" Width="16" Height="16"/>
                                             </Button>
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     Command="{Binding DataContext.MoveDownCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                     CommandParameter="{Binding}"
-                                                    ToolTip="Move down" Width="28" Height="28">
+                                                    ToolTip="{DynamicResource Merge.MoveDown}" Width="28" Height="28">
                                                 <materialDesign:PackIcon Kind="ArrowDown" Width="16" Height="16"/>
                                             </Button>
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     Command="{Binding DataContext.RemoveFileCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                     CommandParameter="{Binding}"
-                                                    ToolTip="Remove" Width="28" Height="28"
+                                                    ToolTip="{DynamicResource Merge.Remove}" Width="28" Height="28"
                                                     Foreground="{DynamicResource MaterialDesignBodyLight}">
                                                 <materialDesign:PackIcon Kind="Delete" Width="16" Height="16"/>
                                             </Button>
@@ -99,15 +110,21 @@
 
                     <ComboBox Grid.Column="0" Margin="0,0,16,0"
                               materialDesign:HintAssist.Hint="{DynamicResource Merge.Bookmarks}"
-                              ItemsSource="{Binding BookmarkOptions}"
-                              SelectedItem="{Binding SelectedBookmarks}"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                              SelectedIndex="{Binding SelectedBookmarkIndex}"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <ComboBoxItem Content="{DynamicResource Merge.Bookmarks.Merge}"/>
+                        <ComboBoxItem Content="{DynamicResource Merge.Bookmarks.Discard}"/>
+                        <ComboBoxItem Content="{DynamicResource Merge.Bookmarks.OneEntry}"/>
+                    </ComboBox>
 
                     <ComboBox Grid.Column="1" Margin="0,0,16,0"
                               materialDesign:HintAssist.Hint="{DynamicResource Merge.AcroForms}"
-                              ItemsSource="{Binding AcroFormOptions}"
-                              SelectedItem="{Binding SelectedAcroForms}"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                              SelectedIndex="{Binding SelectedAcroFormIndex}"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <ComboBoxItem Content="{DynamicResource Merge.AcroForms.Discard}"/>
+                        <ComboBoxItem Content="{DynamicResource Merge.AcroForms.Merge}"/>
+                        <ComboBoxItem Content="{DynamicResource Merge.AcroForms.MergeRename}"/>
+                    </ComboBox>
 
                     <CheckBox Grid.Column="2"
                               Content="{DynamicResource Merge.TOC}"
@@ -130,7 +147,7 @@
                              IsReadOnly="True" Margin="0,0,8,0"/>
                     <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
                             Command="{Binding BrowseOutputCommand}"
-                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
                             VerticalAlignment="Bottom"/>
                 </Grid>
             </materialDesign:Card>

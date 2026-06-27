@@ -24,8 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="PDFsharp" Version="6.1.1" />
-    <PackageReference Include="itext7" Version="8.0.5" />
-    <PackageReference Include="PDFtoImage" Version="4.0.0" />
+<PackageReference Include="PDFtoImage" Version="4.0.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
     <PackageReference Include="MaterialDesignColors" Version="3.1.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />

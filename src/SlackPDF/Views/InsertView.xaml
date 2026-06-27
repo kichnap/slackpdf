@@ -22,12 +22,15 @@
                                  materialDesign:HintAssist.Hint="{DynamicResource Insert.BaseDoc}"
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                  IsReadOnly="True"/>
-                        <TextBlock Text="{Binding BasePageCount, StringFormat='Pages: {0}'}"
-                                   Opacity="0.6" FontSize="12" Margin="0,4,0,0"/>
+                        <TextBlock Opacity="0.6" FontSize="12" Margin="0,4,0,0">
+                            <Run Text="{DynamicResource Common.PageCountPrefix}"/>
+                            <Run Text=" "/>
+                            <Run Text="{Binding BasePageCount, Mode=OneWay}"/>
+                        </TextBlock>
                     </StackPanel>
                     <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
                             Command="{Binding BrowseBaseCommand}"
-                            Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
+                            Style="{StaticResource MaterialDesignRaisedButton}" VerticalAlignment="Bottom"/>
                 </Grid>
             </materialDesign:Card>
 
@@ -50,7 +53,7 @@
                     </StackPanel>
                     <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
                             Command="{Binding BrowseInsertCommand}"
-                            Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Top"/>
+                            Style="{StaticResource MaterialDesignRaisedButton}" VerticalAlignment="Top"/>
                 </Grid>
             </materialDesign:Card>
 
@@ -95,7 +98,7 @@
                              IsReadOnly="True" Margin="0,0,8,0"/>
                     <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
                             Command="{Binding BrowseOutputCommand}"
-                            Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
+                            Style="{StaticResource MaterialDesignRaisedButton}" VerticalAlignment="Bottom"/>
                 </Grid>
             </materialDesign:Card>
 

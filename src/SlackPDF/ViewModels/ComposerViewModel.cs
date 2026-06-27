@@ -18,6 +18,12 @@ public partial class ComposerPage : ObservableObject
     public required Color  DocumentColor { get; init; }
 
     [ObservableProperty] private BitmapSource? _thumbnail;
+    [ObservableProperty] private bool _thumbnailLoaded;
+
+    public bool ThumbnailFailed => ThumbnailLoaded && Thumbnail == null;
+
+    partial void OnThumbnailLoadedChanged(bool value) => OnPropertyChanged(nameof(ThumbnailFailed));
+    partial void OnThumbnailChanged(BitmapSource? value) => OnPropertyChanged(nameof(ThumbnailFailed));
 
     public string DisplayLabel => $"{DocumentLabel}·p.{SourcePageIndex + 1}";
 
@@ -27,11 +33,17 @@ public partial class ComposerPage : ObservableObject
 
 public partial class ComposerDocument : ObservableObject
 {
-    public required PdfFileInfo Info { get; init; }
-    public required string Label    { get; init; }
-    public required Color  Color    { get; init; }
+    public required PdfFileInfo Info     { get; init; }
+    public required string Label         { get; init; }
+    public required Color  Color         { get; init; }
+    public required string PdfVersion    { get; init; }
     public ObservableCollection<ComposerPageThumb> Pages { get; } = [];
     public SolidColorBrush ColorBrush => new(Color);
+
+    // Convenience properties for the tooltip binding
+    public string FileName          => Info.FileName;
+    public int    PageCount         => Info.PageCount;
+    public string FileSizeFormatted => Info.FileSizeFormatted;
 }
 
 public partial class ComposerPageThumb : ObservableObject
@@ -40,7 +52,13 @@ public partial class ComposerPageThumb : ObservableObject
     public required int    PageIndex { get; init; }
     public required string Label     { get; init; }
     [ObservableProperty] private BitmapSource? _thumbnail;
+    [ObservableProperty] private bool _thumbnailLoaded;
     [ObservableProperty] private bool _isSelected;
+
+    public bool ThumbnailFailed => ThumbnailLoaded && Thumbnail == null;
+
+    partial void OnThumbnailLoadedChanged(bool value) => OnPropertyChanged(nameof(ThumbnailFailed));
+    partial void OnThumbnailChanged(BitmapSource? value) => OnPropertyChanged(nameof(ThumbnailFailed));
 }
 
 public partial class ComposerViewModel : BaseOperationViewModel
@@ -62,6 +80,9 @@ public partial class ComposerViewModel : BaseOperationViewModel
     [ObservableProperty] private ObservableCollection<ComposerPage> _composedPages = [];
     [ObservableProperty] private ComposerDocument? _activeDocument;
 
+    // Persists the left-panel width across navigation
+    [ObservableProperty] private double _sourcePanelWidth = 260;
+
     public ComposerViewModel(PdfOperations ops, ThumbnailService thumbs) : base(ops)
     {
         _thumbs = thumbs;
@@ -73,44 +94,68 @@ public partial class ComposerViewModel : BaseOperationViewModel
     [RelayCommand]
     private async Task AddDocumentAsync()
     {
-        var dlg = new OpenFileDialog { Filter = "PDF files (*.pdf)|*.pdf" };
+        var dlg = new OpenFileDialog { Filter = "PDF files (*.pdf)|*.pdf", Multiselect = true };
         if (dlg.ShowDialog() != true) return;
 
-        try
+        ComposerDocument? firstAdded = null;
+        foreach (var fileName in dlg.FileNames)
         {
-            int labelIdx = Documents.Count;
-            string label = labelIdx < 26
-                ? ((char)('A' + labelIdx)).ToString()
-                : $"#{labelIdx + 1}";
-            var color = Palette[labelIdx % Palette.Length];
+            try
+            {
+                int labelIdx = Documents.Count;
+                string label = labelIdx < 26
+                    ? ((char)('A' + labelIdx)).ToString()
+                    : $"#{labelIdx + 1}";
+                var color = Palette[labelIdx % Palette.Length];
 
-            using var doc = PdfSharp.Pdf.IO.PdfReader.Open(dlg.FileName, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import);
-            var info = new PdfFileInfo(dlg.FileName, Path.GetFileName(dlg.FileName),
-                doc.PageCount, new FileInfo(dlg.FileName).Length, PageSelection.All)
-            { Label = label, Color = color };
+                string pdfVersion;
+                int pageCount;
+                using (var doc = PdfSharp.Pdf.IO.PdfReader.Open(fileName, PdfSharp.Pdf.IO.PdfDocumentOpenMode.Import))
+                {
+                    pageCount = doc.PageCount;
+                    pdfVersion = $"PDF {doc.Version / 10}.{doc.Version % 10}";
+                }
 
-            var compDoc = new ComposerDocument { Info = info, Label = label, Color = color };
-            Documents.Add(compDoc);
-            ActiveDocument = compDoc;
+                var info = new PdfFileInfo(fileName, Path.GetFileName(fileName),
+                    pageCount, new FileInfo(fileName).Length, PageSelection.All)
+                { Label = label, Color = color };
 
-            _ = LoadDocumentThumbnailsAsync(compDoc);
+                var compDoc = new ComposerDocument
+                {
+                    Info = info, Label = label, Color = color, PdfVersion = pdfVersion
+                };
+                Documents.Add(compDoc);
+                firstAdded ??= compDoc;
+
+                _ = LoadDocumentThumbnailsAsync(compDoc);
+            }
+            catch { }
         }
-        catch { }
+
+        if (firstAdded != null)
+            ActiveDocument = firstAdded;
     }
 
     private async Task LoadDocumentThumbnailsAsync(ComposerDocument doc)
     {
+        // First pass: add all placeholders immediately so the user can see the page count
         for (int i = 0; i < doc.Info.PageCount; i++)
         {
-            var thumb = new ComposerPageThumb
+            doc.Pages.Add(new ComposerPageThumb
             {
-                FilePath = doc.Info.FilePath,
+                FilePath  = doc.Info.FilePath,
                 PageIndex = i,
-                Label = $"{doc.Label}·{i + 1}"
-            };
-            doc.Pages.Add(thumb);
+                Label     = $"{doc.Label}·{i + 1}"
+            });
+        }
+
+        // Second pass: load thumbnails one by one in the background
+        for (int i = 0; i < doc.Pages.Count; i++)
+        {
+            var thumb = doc.Pages[i];
             var bmp = await _thumbs.GetThumbnailAsync(doc.Info.FilePath, i);
             thumb.Thumbnail = bmp;
+            thumb.ThumbnailLoaded = true;
         }
     }
 
@@ -140,6 +185,7 @@ public partial class ComposerViewModel : BaseOperationViewModel
     {
         var bmp = await _thumbs.GetThumbnailAsync(page.SourceFilePath, page.SourcePageIndex);
         page.Thumbnail = bmp;
+        page.ThumbnailLoaded = true;
     }
 
     [RelayCommand]

@@ -351,3 +351,6 @@ FodyWeavers.xsd
 publish/
 installer/Output/
 *.user
+
+# Local-only files (not for GitHub)
+SlackPDF_Project_Prompt.md

@@ -1,41 +1,29 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
-using SlackPDF.Core;
-using SlackPDF.Core.Engines;
 using SlackPDF.Services;
+using System.Diagnostics;
 
 namespace SlackPDF.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
-    private readonly PdfOperations _ops;
     private readonly ThumbnailService _thumbs;
     private AppSettings _settings;
 
     [ObservableProperty] private bool _isEnglish = true;
     [ObservableProperty] private bool _isRussian;
-    [ObservableProperty] private bool _isPdfSharp = true;
-    [ObservableProperty] private bool _isIText;
     [ObservableProperty] private bool _isLightTheme = true;
     [ObservableProperty] private bool _isDarkTheme;
     [ObservableProperty] private string _statusMessage = string.Empty;
 
-    public SettingsViewModel(PdfOperations ops, ThumbnailService thumbs)
+    public SettingsViewModel(SlackPDF.Core.PdfOperations ops, ThumbnailService thumbs)
     {
-        _ops = ops;
         _thumbs = thumbs;
         _settings = SettingsService.Load();
-        LoadFromSettings();
-    }
-
-    private void LoadFromSettings()
-    {
-        IsEnglish  = _settings.Language == "en-US";
-        IsRussian  = _settings.Language == "ru-RU";
-        IsPdfSharp = _settings.PdfEngine == "PDFsharp";
-        IsIText    = _settings.PdfEngine == "iText";
-        IsLightTheme = _settings.Theme == "Light";
+        IsEnglish    = _settings.Language == "en-US";
+        IsRussian    = _settings.Language == "ru-RU";
+        IsLightTheme = _settings.Theme != "Dark";
         IsDarkTheme  = _settings.Theme == "Dark";
     }
 
@@ -47,17 +35,6 @@ public partial class SettingsViewModel : ObservableObject
         SettingsService.Save(_settings);
         IsEnglish = code == "en-US";
         IsRussian = code == "ru-RU";
-    }
-
-    [RelayCommand]
-    private void SetEngine(string name)
-    {
-        IPdfEngine engine = name == "iText" ? new ITextEngine() : new PdfSharpEngine();
-        _ops.SetEngine(engine);
-        _settings = _settings with { PdfEngine = name };
-        SettingsService.Save(_settings);
-        IsPdfSharp = name == "PDFsharp";
-        IsIText    = name == "iText";
     }
 
     [RelayCommand]
@@ -77,6 +54,15 @@ public partial class SettingsViewModel : ObservableObject
     private void ClearCache()
     {
         _thumbs.ClearCache();
-        StatusMessage = "Cache cleared.";
+        StatusMessage = Localization.LocalizationManager.Get("Settings.CacheCleared");
+    }
+
+    [RelayCommand]
+    private void OpenGitHub()
+    {
+        Process.Start(new ProcessStartInfo("https://github.com/kichnap/slackpdf")
+        {
+            UseShellExecute = true
+        });
     }
 }

@@ -25,6 +25,9 @@
   <sys:String x:Key="Common.Error">Ошибка: {0}</sys:String>
   <sys:String x:Key="Common.Pages">стр.</sys:String>
   <sys:String x:Key="Common.DropFilesHere">Перетащи PDF-файлы сюда или нажми «Добавить файлы»</sys:String>
+  <sys:String x:Key="Common.InputFile">Входной PDF-файл</sys:String>
+  <sys:String x:Key="Common.PageCountPrefix">Страниц:</sys:String>
+  <sys:String x:Key="Common.Column.File">Файл</sys:String>
 
   <!-- Объединение -->
   <sys:String x:Key="Merge.Title">Объединить PDF</sys:String>
@@ -37,6 +40,11 @@
   <sys:String x:Key="Merge.AcroForms.Merge">Объединить</sys:String>
   <sys:String x:Key="Merge.AcroForms.MergeRename">Объединить с переименованием</sys:String>
   <sys:String x:Key="Merge.TOC">Добавить оглавление</sys:String>
+  <sys:String x:Key="Merge.Column.Pages">Страниц</sys:String>
+  <sys:String x:Key="Merge.Column.Size">Размер</sys:String>
+  <sys:String x:Key="Merge.MoveUp">Переместить вверх</sys:String>
+  <sys:String x:Key="Merge.MoveDown">Переместить вниз</sys:String>
+  <sys:String x:Key="Merge.Remove">Удалить</sys:String>
 
   <!-- Разбивка -->
   <sys:String x:Key="Split.Title">Разделить PDF</sys:String>
@@ -50,12 +58,14 @@
   <sys:String x:Key="Split.Prefix">Префикс имени файла</sys:String>
   <sys:String x:Key="Split.NPages">Страниц в файле</sys:String>
   <sys:String x:Key="Split.AtPagesHint">напр. 5, 10, 15</sys:String>
+  <sys:String x:Key="Split.ModeTitle">Режим разбивки</sys:String>
 
   <!-- Чередование -->
   <sys:String x:Key="Mix.Title">Чередование страниц</sys:String>
   <sys:String x:Key="Mix.Straight">Прямой порядок</sys:String>
   <sys:String x:Key="Mix.Reverse">Обратный порядок</sys:String>
   <sys:String x:Key="Mix.Description">Чередует страницы из нескольких PDF. Идеально для односторонних сканов.</sys:String>
+  <sys:String x:Key="Mix.Column.Order">Порядок</sys:String>
 
   <!-- Поворот -->
   <sys:String x:Key="Rotate.Title">Повернуть страницы</sys:String>
@@ -66,6 +76,7 @@
   <sys:String x:Key="Rotate.Selection">Выбор страниц</sys:String>
   <sys:String x:Key="Rotate.Overwrite">Перезаписать оригинал</sys:String>
   <sys:String x:Key="Rotate.OverwriteWarning">Внимание: оригинальный файл будет заменён!</sys:String>
+  <sys:String x:Key="Rotate.ApplyTo">Применить к</sys:String>
 
   <!-- Извлечение -->
   <sys:String x:Key="Extract.Title">Извлечь страницы</sys:String>
@@ -73,6 +84,7 @@
   <sys:String x:Key="Extract.OnePerPage">По файлу на страницу</sys:String>
   <sys:String x:Key="Extract.OnePerRange">По файлу на диапазон</sys:String>
   <sys:String x:Key="Extract.OutputMode">Режим вывода</sys:String>
+  <sys:String x:Key="Extract.AllPagesHint">Оставьте пустым для выбора всех страниц</sys:String>
 
   <!-- Вставка -->
   <sys:String x:Key="Insert.Title">Вставить страницы</sys:String>
@@ -100,6 +112,9 @@
   <sys:String x:Key="Composer.Menu.Duplicate">Дублировать</sys:String>
   <sys:String x:Key="Composer.Sources">Исходные документы</sys:String>
   <sys:String x:Key="Composer.Assembly">Сборка документа</sys:String>
+  <sys:String x:Key="Composer.DocInfo.Pages">Страниц:</sys:String>
+  <sys:String x:Key="Composer.DocInfo.Size">Размер:</sys:String>
+  <sys:String x:Key="Composer.DocInfo.PdfVersion">Версия PDF:</sys:String>
 
   <!-- Настройки -->
   <sys:String x:Key="Settings.Title">Настройки</sys:String>
@@ -111,6 +126,10 @@
   <sys:String x:Key="Settings.ThumbnailCache">Папка кэша миниатюр</sys:String>
   <sys:String x:Key="Settings.ClearCache">Очистить кэш миниатюр</sys:String>
   <sys:String x:Key="Settings.About">О программе SlackPDF</sys:String>
+  <sys:String x:Key="Settings.GitHub">GitHub — github.com/kichnap/slackpdf</sys:String>
+  <sys:String x:Key="Settings.CacheCleared">Кэш миниатюр очищен.</sys:String>
   <sys:String x:Key="Settings.Version">Версия 1.0.0 — GPL v3 — Бесплатно и открыто</sys:String>
+  <sys:String x:Key="Settings.OpenSource">Компоненты с открытым исходным кодом</sys:String>
+  <sys:String x:Key="MainWindow.Engine">Движок:</sys:String>
 
 </ResourceDictionary>

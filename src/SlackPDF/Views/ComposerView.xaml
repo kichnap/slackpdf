@@ -42,7 +42,8 @@
         <!-- Main two-panel layout -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="260" MinWidth="200"/>
+                <!-- x:Name so code-behind can read/write Width for persistence -->
+                <ColumnDefinition x:Name="SourceColumn" Width="260" MinWidth="180"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
@@ -67,7 +68,7 @@
                     </DockPanel>
                 </Border>
 
-                <!-- Document tabs -->
+                <!-- Document tab strip: each label shows a tooltip with file metadata -->
                 <ListBox DockPanel.Dock="Top"
                          ItemsSource="{Binding Documents}"
                          SelectedItem="{Binding ActiveDocument}"
@@ -81,7 +82,33 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type vm:ComposerDocument}">
-                            <StackPanel Orientation="Horizontal" Margin="4,2">
+                            <StackPanel Orientation="Horizontal" Margin="4,2"
+                                        ToolTipService.ShowDuration="10000"
+                                        ToolTipService.InitialShowDelay="400">
+                                <StackPanel.ToolTip>
+                                    <ToolTip>
+                                        <StackPanel MinWidth="200">
+                                            <TextBlock Text="{Binding FileName}"
+                                                       FontWeight="Bold" TextWrapping="Wrap"
+                                                       Margin="0,0,0,6"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,1">
+                                                <TextBlock Text="{DynamicResource Composer.DocInfo.Pages}"
+                                                           Opacity="0.6" Width="100"/>
+                                                <TextBlock Text="{Binding PageCount}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,1">
+                                                <TextBlock Text="{DynamicResource Composer.DocInfo.Size}"
+                                                           Opacity="0.6" Width="100"/>
+                                                <TextBlock Text="{Binding FileSizeFormatted}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,1">
+                                                <TextBlock Text="{DynamicResource Composer.DocInfo.PdfVersion}"
+                                                           Opacity="0.6" Width="100"/>
+                                                <TextBlock Text="{Binding PdfVersion}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </StackPanel.ToolTip>
                                 <Ellipse Width="10" Height="10" Fill="{Binding ColorBrush}" Margin="0,0,4,0"/>
                                 <TextBlock Text="{Binding Label}" FontWeight="Bold"/>
                             </StackPanel>
@@ -89,7 +116,9 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
 
-                <!-- Page thumbnails of active doc -->
+                <!-- Page thumbnails of active doc.
+                     Click = select one. Ctrl+Click = toggle. Shift+Click = range.
+                     Drag any selected thumb to move all selected to Assembly. -->
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding ActiveDocument.Pages}">
                         <ItemsControl.ItemsPanel>
@@ -102,17 +131,41 @@
                                 <Border Width="72" Height="100" Margin="4"
                                         Cursor="Hand"
                                         MouseLeftButtonDown="SourceThumb_MouseLeftButtonDown"
-                                        MouseMove="SourceThumb_MouseMove">
-                                    <Border.Background>
-                                        <SolidColorBrush Color="Transparent"/>
-                                    </Border.Background>
+                                        MouseMove="SourceThumb_MouseMove"
+                                        MouseLeftButtonUp="SourceThumb_MouseLeftButtonUp"
+                                        Background="Transparent">
                                     <Grid>
+                                        <!-- Thumbnail image (or empty background while loading) -->
                                         <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                                                 BorderThickness="{Binding IsSelected, Converter={StaticResource BoolToThicknessConverter}}"
+                                                Background="#12000000"
                                                 CornerRadius="2">
-                                            <Image Source="{Binding Thumbnail}"
-                                                   Stretch="UniformToFill"/>
+                                            <Image Source="{Binding Thumbnail}" Stretch="UniformToFill"
+                                                   Visibility="{Binding Thumbnail, Converter={StaticResource IsNotNullToVisibilityConverter}}"/>
                                         </Border>
+
+                                        <!-- Silhouette placeholder while thumbnail is not loaded yet -->
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                    Visibility="{Binding Thumbnail, Converter={StaticResource IsNullToVisibilityConverter}}">
+                                            <materialDesign:PackIcon Kind="FileOutline" Width="28" Height="36"
+                                                                     Foreground="#60808080" HorizontalAlignment="Center"/>
+                                            <!-- Warning icon only after a failed load attempt -->
+                                            <materialDesign:PackIcon Kind="AlertCircleOutline" Width="14" Height="14"
+                                                                     Foreground="#C0FF8800" HorizontalAlignment="Center"
+                                                                     Margin="0,3,0,0"
+                                                                     Visibility="{Binding ThumbnailFailed, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </StackPanel>
+
+                                        <!-- Selection overlay: semi-transparent fill + checkmark -->
+                                        <Border Background="#CC1A237E" CornerRadius="2"
+                                                Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <materialDesign:PackIcon Kind="Check" Width="28" Height="28"
+                                                                     Foreground="White"
+                                                                     HorizontalAlignment="Center"
+                                                                     VerticalAlignment="Center"/>
+                                        </Border>
+
+                                        <!-- Page number badge -->
                                         <TextBlock Text="{Binding PageIndex, Converter={StaticResource PageIndexToNumberConverter}}"
                                                    FontSize="10" HorizontalAlignment="Center"
                                                    VerticalAlignment="Bottom" Margin="0,0,0,2"
@@ -125,7 +178,8 @@
                 </ScrollViewer>
             </DockPanel>
 
-            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+            <!-- x:Name so code-behind can subscribe to DragCompleted for width persistence -->
+            <GridSplitter x:Name="SourceSplitter" Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
 
             <!-- Right: Assembly zone -->
             <DockPanel Grid.Column="2">
@@ -168,6 +222,12 @@
                                     <Grid>
                                         <Image Source="{Binding Thumbnail}"
                                                Stretch="UniformToFill" Margin="2"/>
+                                        <materialDesign:PackIcon Kind="AlertCircleOutline"
+                                                                 Width="22" Height="22"
+                                                                 Foreground="#C0FF8800"
+                                                                 HorizontalAlignment="Center"
+                                                                 VerticalAlignment="Center"
+                                                                 Visibility="{Binding ThumbnailFailed, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Border Background="{Binding ColorBrush}"
                                                 CornerRadius="2" Padding="3,1"
                                                 HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -175,8 +235,6 @@
                                             <TextBlock Text="{Binding DisplayLabel}"
                                                        Foreground="White" FontSize="10" FontWeight="Bold"/>
                                         </Border>
-
-                                        <!-- Context menu button -->
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
                                                 HorizontalAlignment="Right" VerticalAlignment="Top"
                                                 Width="22" Height="22" Margin="2"
