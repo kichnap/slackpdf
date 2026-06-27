@@ -20,19 +20,19 @@ jobs:
           dotnet-version: '9.x'
 
       - name: Publish self-contained
+        run: dotnet publish src/SlackPDF/SlackPDF.csproj -c Release -o publish/
+
+      - name: Extract version (strip leading v)
+        shell: pwsh
         run: |
-          dotnet publish src/SlackPDF/SlackPDF.csproj `
-            -c Release `
-            -r win-x64 `
-            --self-contained true `
-            -p:PublishSingleFile=true `
-            -o publish/
+          $ver = "${{ github.ref_name }}" -replace '^v', ''
+          "VERSION=$ver" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Build Inno Setup installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.4
         with:
           path: installer/SlackPDF.iss
-          options: /DAppVersion=${{ github.ref_name }}
+          options: /DAppVersion=${{ env.VERSION }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
