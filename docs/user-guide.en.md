@@ -22,8 +22,6 @@ The main window has a sidebar for navigation and a work area on the right. Switc
 
 <!-- screenshot: main window -->
 
-A **loading overlay** appears during processing. The **Cancel** button stops the operation at any point.
-
 The **status bar** at the bottom of each module shows the result of the last operation or an error message.
 
 ---
