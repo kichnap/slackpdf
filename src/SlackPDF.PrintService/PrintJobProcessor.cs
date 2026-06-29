@@ -11,6 +11,13 @@ public class PrintJobProcessor
         _settings = settings;
     }
 
+    public Task<string?> SaveAsync(
+        string tempPdfPath,
+        string jobName,
+        string? appName,
+        CancellationToken ct)
+        => SaveAsync(tempPdfPath, jobName, appName, null, ct);
+
     public async Task<string?> SaveAsync(
         string tempPdfPath,
         string jobName,
