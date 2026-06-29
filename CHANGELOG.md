@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-06-30
+
+### Added
+- Merge: multi-selection support — Ctrl+click / Shift+click to select several files;
+  ↑↓ buttons move the entire selection as a group
+- Mix: ↑↓ reorder buttons extracted from the DataGrid column to a fixed side panel
+  (same layout as Merge); MoveUp / MoveDown commands added to MixViewModel
+
+### Changed
+- Merge, Mix: file list now fills all available window space between the title and
+  the bottom controls; resizing the window expands the list (Grid `*` row instead
+  of fixed `MinHeight/MaxHeight`)
+- Merge, Mix: ↑↓ and Delete buttons moved from inside each DataGrid row to a vertical
+  panel on the right — buttons stay in place while scrolling, easier to use on long lists
+- Mix order column: RadioButtons replaced with a CheckBox that shows
+  "Straight order" / "Reverse order" — RadioButtons in a DataGrid DataTemplate
+  share a single group across all rows (WPF limitation), making only one row selectable
+- Mix description text expanded to explain the interleaving algorithm and what
+  "Reverse order" does
+- Installer: added `VersionInfoCopyright`, `VersionInfoCompany`, `VersionInfoProductName`,
+  `VersionInfoDescription` — copyright field is now populated in Setup.exe properties
+
+### Fixed
+- PrinterInstaller: error 1802 (`ERROR_PRINTER_ALREADY_EXISTS`) on reinstall over an
+  existing installation — printer and service are now deleted before recreating (idempotent)
+
 ## [1.1.0] - 2026-06-29
 
 ### Added

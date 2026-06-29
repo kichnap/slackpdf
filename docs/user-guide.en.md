@@ -35,7 +35,9 @@ Combines multiple PDF files into one. Supports per-file page range selection.
 ### How to use
 
 1. Click **Add files** or drag PDF files directly into the table
-2. Reorder files using the ↑↓ arrows in the rightmost column
+2. Reorder files using the **↑ ↓** buttons in the panel to the right of the table:
+   - Click a row to select one file
+   - Ctrl+click or Shift+click to select multiple files; the arrows move the whole group at once
 3. In the **Page selection** column, specify which pages to include (leave empty for all pages):
    - `1-5` — pages 1 through 5
    - `1,3,7` — specific pages
@@ -81,17 +83,21 @@ Splits a single PDF into multiple parts.
 
 ## Mix
 
-Interleaves pages from two or more PDF files. Perfect for duplex documents scanned on a single-sided scanner — odd pages in one file, even pages in another.
+Interleaves pages from two or more PDF files: page 1 of file A → page 1 of file B → page 2 of file A → page 2 of file B…
+
+Perfect for duplex documents scanned on a single-sided scanner — odd pages in one file, even pages in another.
 
 <!-- screenshot: Mix module -->
 
 ### How to use
 
 1. Add files via **Add files** or drag them in
-2. The order in the table controls the interleave pattern: page 1 of file 1, page 1 of file 2, page 2 of file 1, and so on
-3. Set the output file and click **Run**
+2. The order in the table controls the interleave pattern
+3. In the **Order** column, check the **Reverse order** checkbox for files whose pages run in reverse (typical for even pages in duplex scanning)
+4. The **↑ ↓** buttons to the right of the table reorder files (multi-selection supported)
+5. Set the output file and click **Run**
 
-> **Tip for duplex scanning:** scan odd pages into file A, scan even pages in reverse order into file B, then add B with the "Reverse order" option enabled.
+> **Tip for duplex scanning:** scan odd pages into file A, scan even pages in reverse order into file B, add both, and check "Reverse order" for file B.
 
 ---
 

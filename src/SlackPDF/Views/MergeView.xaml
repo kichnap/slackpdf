@@ -39,6 +39,8 @@
 
                     <DataGrid ItemsSource="{Binding Files}"
                               SelectedItem="{Binding SelectedFile}"
+                              SelectionMode="Extended"
+                              SelectionChanged="FileList_SelectionChanged"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"

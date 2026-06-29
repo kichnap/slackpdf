@@ -1,5 +1,5 @@
 #define AppName "SlackPDF"
-#define AppVersion "1.1.0"
+#define AppVersion "1.2.0"
 #define AppPublisher "kichnap"
 #define AppURL "https://github.com/kichnap/slackpdf"
 #define AppExeName "SlackPDF.exe"
@@ -21,6 +21,11 @@ WizardStyle=modern
 LicenseFile=..\LICENSE
 ArchitecturesInstallIn64BitMode=x64compatible
 PrivilegesRequired=admin
+VersionInfoVersion={#AppVersion}
+VersionInfoProductName={#AppName}
+VersionInfoCompany={#AppPublisher}
+VersionInfoCopyright=Copyright © 2026 {#AppPublisher}
+VersionInfoDescription={#AppName} Setup
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

@@ -1,15 +1,13 @@
 using System.Windows;
 using System.Windows.Controls;
 using SlackPDF.ViewModels;
+using SlackPDF.Core.Models;
 
 namespace SlackPDF.Views;
 
 public partial class MergeView : UserControl
 {
-    public MergeView()
-    {
-        InitializeComponent();
-    }
+    public MergeView() => InitializeComponent();
 
     private void FileList_DragOver(object sender, DragEventArgs e)
     {
@@ -33,5 +31,13 @@ public partial class MergeView : UserControl
         foreach (var f in files.Where(f => f.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase)))
             vm.AddFile(f);
         e.Handled = true;
+    }
+
+    private void FileList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (DataContext is not MergeViewModel vm) return;
+        if (sender is not DataGrid dg) return;
+        vm.SelectedFiles = dg.SelectedItems.OfType<PdfFileInfo>().ToList();
+        vm.NotifySelectionChanged();
     }
 }

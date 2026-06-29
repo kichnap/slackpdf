@@ -52,6 +52,11 @@ public static class PrinterInstaller
         Log("Restarting Spooler...");
         RestartSpooler();
 
+        // Remove existing printer before recreating (idempotent reinstall).
+        // AddPrinter fails with ERROR_PRINTER_ALREADY_EXISTS (1802) otherwise.
+        Log("Removing existing printer (if any)...");
+        DeletePrinterByName();
+
         Log("Creating printer...");
         AddPrinter();
 
@@ -60,6 +65,10 @@ public static class PrinterInstaller
 
         Log("Registering Toast AUMID...");
         RegisterToastAumid(installDir);
+
+        // Stop & delete existing service so sc.exe create succeeds on reinstall.
+        Log("Removing existing service (if any)...");
+        StopAndDeleteService();
 
         Log("Registering Windows Service...");
         RegisterService(installDir);

@@ -13,7 +13,12 @@ public partial class MergeViewModel : BaseOperationViewModel
     [ObservableProperty] private BookmarkBehavior _selectedBookmarks = BookmarkBehavior.Merge;
     [ObservableProperty] private AcroFormBehavior _selectedAcroForms = AcroFormBehavior.Discard;
     [ObservableProperty] private bool _addTableOfContents;
+
+    // Primary selected item — bound to DataGrid.SelectedItem for visual focus tracking.
     [ObservableProperty] private PdfFileInfo? _selectedFile;
+
+    // All currently selected items — populated by MergeView.xaml.cs on SelectionChanged.
+    public List<PdfFileInfo> SelectedFiles { get; set; } = [];
 
     public MergeViewModel(PdfOperations ops) : base(ops) { }
 
@@ -35,7 +40,8 @@ public partial class MergeViewModel : BaseOperationViewModel
     partial void OnSelectedAcroFormsChanged(AcroFormBehavior value)
         => OnPropertyChanged(nameof(SelectedAcroFormIndex));
 
-    partial void OnSelectedFileChanged(PdfFileInfo? value)
+    // Called by code-behind after DataGrid.SelectionChanged.
+    public void NotifySelectionChanged()
     {
         MoveUpCommand.NotifyCanExecuteChanged();
         MoveDownCommand.NotifyCanExecuteChanged();
@@ -66,28 +72,41 @@ public partial class MergeViewModel : BaseOperationViewModel
     [RelayCommand(CanExecute = nameof(CanActOnSelection))]
     private void MoveUp()
     {
-        if (SelectedFile is not { } file) return;
-        int i = Files.IndexOf(file);
-        if (i > 0) Files.Move(i, i - 1);
+        // Move all selected items up; process in ascending index order so earlier
+        // items don't push later ones out of position.
+        var toMove = SelectedFiles.OrderBy(f => Files.IndexOf(f)).ToList();
+        foreach (var file in toMove)
+        {
+            int i = Files.IndexOf(file);
+            // Skip if at top OR if the item above is also selected (the group is already packed).
+            if (i > 0 && !toMove.Contains(Files[i - 1]))
+                Files.Move(i, i - 1);
+        }
     }
 
     [RelayCommand(CanExecute = nameof(CanActOnSelection))]
     private void MoveDown()
     {
-        if (SelectedFile is not { } file) return;
-        int i = Files.IndexOf(file);
-        if (i < Files.Count - 1) Files.Move(i, i + 1);
+        // Process in descending index order so later items don't push earlier ones.
+        var toMove = SelectedFiles.OrderByDescending(f => Files.IndexOf(f)).ToList();
+        foreach (var file in toMove)
+        {
+            int i = Files.IndexOf(file);
+            if (i < Files.Count - 1 && !toMove.Contains(Files[i + 1]))
+                Files.Move(i, i + 1);
+        }
     }
 
     [RelayCommand(CanExecute = nameof(CanActOnSelection))]
     private void RemoveFile()
     {
-        if (SelectedFile is not { } file) return;
-        Files.Remove(file);
+        foreach (var file in SelectedFiles.ToList())
+            Files.Remove(file);
+        SelectedFiles.Clear();
         SelectedFile = null;
     }
 
-    private bool CanActOnSelection() => SelectedFile != null;
+    private bool CanActOnSelection() => SelectedFiles.Count > 0;
 
     [RelayCommand]
     private void ClearAll() => Files.Clear();
