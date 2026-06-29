@@ -35,14 +35,17 @@ public partial class MergeViewModel : BaseOperationViewModel
     partial void OnSelectedAcroFormsChanged(AcroFormBehavior value)
         => OnPropertyChanged(nameof(SelectedAcroFormIndex));
 
+    partial void OnSelectedFileChanged(PdfFileInfo? value)
+    {
+        MoveUpCommand.NotifyCanExecuteChanged();
+        MoveDownCommand.NotifyCanExecuteChanged();
+        RemoveFileCommand.NotifyCanExecuteChanged();
+    }
+
     [RelayCommand]
     private void AddFiles()
     {
-        var dlg = new OpenFileDialog
-        {
-            Filter = "PDF files (*.pdf)|*.pdf",
-            Multiselect = true
-        };
+        var dlg = new OpenFileDialog { Filter = "PDF files (*.pdf)|*.pdf", Multiselect = true };
         if (dlg.ShowDialog() != true) return;
         foreach (var f in dlg.FileNames)
             AddFile(f);
@@ -60,22 +63,31 @@ public partial class MergeViewModel : BaseOperationViewModel
         catch { }
     }
 
-    [RelayCommand]
-    private void RemoveFile(PdfFileInfo file) => Files.Remove(file);
-
-    [RelayCommand]
-    private void MoveUp(PdfFileInfo file)
+    [RelayCommand(CanExecute = nameof(CanActOnSelection))]
+    private void MoveUp()
     {
+        if (SelectedFile is not { } file) return;
         int i = Files.IndexOf(file);
         if (i > 0) Files.Move(i, i - 1);
     }
 
-    [RelayCommand]
-    private void MoveDown(PdfFileInfo file)
+    [RelayCommand(CanExecute = nameof(CanActOnSelection))]
+    private void MoveDown()
     {
+        if (SelectedFile is not { } file) return;
         int i = Files.IndexOf(file);
         if (i < Files.Count - 1) Files.Move(i, i + 1);
     }
+
+    [RelayCommand(CanExecute = nameof(CanActOnSelection))]
+    private void RemoveFile()
+    {
+        if (SelectedFile is not { } file) return;
+        Files.Remove(file);
+        SelectedFile = null;
+    }
+
+    private bool CanActOnSelection() => SelectedFile != null;
 
     [RelayCommand]
     private void ClearAll() => Files.Clear();

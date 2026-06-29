@@ -4,15 +4,29 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:SlackPDF.ViewModels">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="24">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="{DynamicResource Merge.Title}"
-                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                       Margin="0,0,0,16"/>
+        <!-- Title -->
+        <TextBlock Grid.Row="0"
+                   Text="{DynamicResource Merge.Title}"
+                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                   Margin="0,0,0,16"/>
 
-            <!-- File list -->
-            <materialDesign:Card Padding="0" Margin="0,0,0,16">
+        <!-- File list + side action buttons -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <materialDesign:Card Grid.Column="0" Padding="0">
                 <DockPanel>
                     <ToolBar DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignToolBar}">
                         <Button Content="{DynamicResource Common.AddFiles}"
@@ -29,7 +43,6 @@
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
                               IsReadOnly="False"
-                              MinHeight="160" MaxHeight="300"
                               materialDesign:DataGridAssist.CellPadding="8 4"
                               AllowDrop="True"
                               PreviewDragOver="FileList_DragOver"
@@ -69,99 +82,92 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                    Command="{Binding DataContext.MoveUpCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                    CommandParameter="{Binding}"
-                                                    ToolTip="{DynamicResource Merge.MoveUp}" Width="28" Height="28">
-                                                <materialDesign:PackIcon Kind="ArrowUp" Width="16" Height="16"/>
-                                            </Button>
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                    Command="{Binding DataContext.MoveDownCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                    CommandParameter="{Binding}"
-                                                    ToolTip="{DynamicResource Merge.MoveDown}" Width="28" Height="28">
-                                                <materialDesign:PackIcon Kind="ArrowDown" Width="16" Height="16"/>
-                                            </Button>
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                    Command="{Binding DataContext.RemoveFileCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                    CommandParameter="{Binding}"
-                                                    ToolTip="{DynamicResource Merge.Remove}" Width="28" Height="28"
-                                                    Foreground="{DynamicResource MaterialDesignBodyLight}">
-                                                <materialDesign:PackIcon Kind="Delete" Width="16" Height="16"/>
-                                            </Button>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>
             </materialDesign:Card>
 
-            <!-- Options -->
-            <materialDesign:Card Padding="16" Margin="0,0,0,16">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+            <!-- Side action buttons: fixed position, operate on selected row -->
+            <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Top">
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding MoveUpCommand}"
+                        ToolTip="{DynamicResource Merge.MoveUp}">
+                    <materialDesign:PackIcon Kind="ArrowUp"/>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding MoveDownCommand}"
+                        ToolTip="{DynamicResource Merge.MoveDown}">
+                    <materialDesign:PackIcon Kind="ArrowDown"/>
+                </Button>
+                <Separator Margin="8,4"/>
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding RemoveFileCommand}"
+                        ToolTip="{DynamicResource Merge.Remove}">
+                    <materialDesign:PackIcon Kind="Delete"/>
+                </Button>
+            </StackPanel>
+        </Grid>
 
-                    <ComboBox Grid.Column="0" Margin="0,0,16,0"
-                              materialDesign:HintAssist.Hint="{DynamicResource Merge.Bookmarks}"
-                              SelectedIndex="{Binding SelectedBookmarkIndex}"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}">
-                        <ComboBoxItem Content="{DynamicResource Merge.Bookmarks.Merge}"/>
-                        <ComboBoxItem Content="{DynamicResource Merge.Bookmarks.Discard}"/>
-                        <ComboBoxItem Content="{DynamicResource Merge.Bookmarks.OneEntry}"/>
-                    </ComboBox>
+        <!-- Options -->
+        <materialDesign:Card Grid.Row="2" Padding="16" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-                    <ComboBox Grid.Column="1" Margin="0,0,16,0"
-                              materialDesign:HintAssist.Hint="{DynamicResource Merge.AcroForms}"
-                              SelectedIndex="{Binding SelectedAcroFormIndex}"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}">
-                        <ComboBoxItem Content="{DynamicResource Merge.AcroForms.Discard}"/>
-                        <ComboBoxItem Content="{DynamicResource Merge.AcroForms.Merge}"/>
-                        <ComboBoxItem Content="{DynamicResource Merge.AcroForms.MergeRename}"/>
-                    </ComboBox>
+                <ComboBox Grid.Column="0" Margin="0,0,16,0"
+                          materialDesign:HintAssist.Hint="{DynamicResource Merge.Bookmarks}"
+                          SelectedIndex="{Binding SelectedBookmarkIndex}"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    <ComboBoxItem Content="{DynamicResource Merge.Bookmarks.Merge}"/>
+                    <ComboBoxItem Content="{DynamicResource Merge.Bookmarks.Discard}"/>
+                    <ComboBoxItem Content="{DynamicResource Merge.Bookmarks.OneEntry}"/>
+                </ComboBox>
 
-                    <CheckBox Grid.Column="2"
-                              Content="{DynamicResource Merge.TOC}"
-                              IsChecked="{Binding AddTableOfContents}"
-                              Style="{StaticResource MaterialDesignCheckBox}"/>
-                </Grid>
-            </materialDesign:Card>
+                <ComboBox Grid.Column="1" Margin="0,0,16,0"
+                          materialDesign:HintAssist.Hint="{DynamicResource Merge.AcroForms}"
+                          SelectedIndex="{Binding SelectedAcroFormIndex}"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    <ComboBoxItem Content="{DynamicResource Merge.AcroForms.Discard}"/>
+                    <ComboBoxItem Content="{DynamicResource Merge.AcroForms.Merge}"/>
+                    <ComboBoxItem Content="{DynamicResource Merge.AcroForms.MergeRename}"/>
+                </ComboBox>
 
-            <!-- Output -->
-            <materialDesign:Card Padding="16" Margin="0,0,0,16">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0"
-                             Text="{Binding OutputPath}"
-                             materialDesign:HintAssist.Hint="{DynamicResource Common.OutputFile}"
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                             IsReadOnly="True" Margin="0,0,8,0"/>
-                    <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
-                            Command="{Binding BrowseOutputCommand}"
-                            Style="{StaticResource MaterialDesignRaisedButton}"
-                            VerticalAlignment="Bottom"/>
-                </Grid>
-            </materialDesign:Card>
+                <CheckBox Grid.Column="2"
+                          Content="{DynamicResource Merge.TOC}"
+                          IsChecked="{Binding AddTableOfContents}"
+                          Style="{StaticResource MaterialDesignCheckBox}"/>
+            </Grid>
+        </materialDesign:Card>
 
-            <!-- Run button -->
-            <Button Content="{DynamicResource Common.Run}"
-                    Command="{Binding RunCommand}"
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    HorizontalAlignment="Left"
-                    Padding="32,8"
-                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+        <!-- Output -->
+        <materialDesign:Card Grid.Row="3" Padding="16" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         Text="{Binding OutputPath}"
+                         materialDesign:HintAssist.Hint="{DynamicResource Common.OutputFile}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         IsReadOnly="True" Margin="0,0,8,0"/>
+                <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
+                        Command="{Binding BrowseOutputCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        VerticalAlignment="Bottom"/>
+            </Grid>
+        </materialDesign:Card>
 
-        </StackPanel>
-    </ScrollViewer>
+        <!-- Run button -->
+        <Button Grid.Row="4"
+                Content="{DynamicResource Common.Run}"
+                Command="{Binding RunCommand}"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                HorizontalAlignment="Left"
+                Padding="32,8"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+    </Grid>
 </UserControl>

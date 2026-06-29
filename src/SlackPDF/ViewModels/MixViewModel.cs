@@ -18,8 +18,16 @@ public partial class MixFileEntry : ObservableObject
 public partial class MixViewModel : BaseOperationViewModel
 {
     [ObservableProperty] private ObservableCollection<MixFileEntry> _files = [];
+    [ObservableProperty] private MixFileEntry? _selectedFile;
 
     public MixViewModel(PdfOperations ops) : base(ops) { }
+
+    partial void OnSelectedFileChanged(MixFileEntry? value)
+    {
+        MoveUpCommand.NotifyCanExecuteChanged();
+        MoveDownCommand.NotifyCanExecuteChanged();
+        RemoveFileCommand.NotifyCanExecuteChanged();
+    }
 
     [RelayCommand]
     private void AddFiles()
@@ -54,8 +62,31 @@ public partial class MixViewModel : BaseOperationViewModel
         catch { }
     }
 
-    [RelayCommand]
-    private void RemoveFile(MixFileEntry entry) => Files.Remove(entry);
+    [RelayCommand(CanExecute = nameof(CanActOnSelection))]
+    private void MoveUp()
+    {
+        if (SelectedFile is not { } file) return;
+        int i = Files.IndexOf(file);
+        if (i > 0) Files.Move(i, i - 1);
+    }
+
+    [RelayCommand(CanExecute = nameof(CanActOnSelection))]
+    private void MoveDown()
+    {
+        if (SelectedFile is not { } file) return;
+        int i = Files.IndexOf(file);
+        if (i < Files.Count - 1) Files.Move(i, i + 1);
+    }
+
+    [RelayCommand(CanExecute = nameof(CanActOnSelection))]
+    private void RemoveFile()
+    {
+        if (SelectedFile is not { } file) return;
+        Files.Remove(file);
+        SelectedFile = null;
+    }
+
+    private bool CanActOnSelection() => SelectedFile != null;
 
     [RelayCommand]
     private void ClearAll() => Files.Clear();

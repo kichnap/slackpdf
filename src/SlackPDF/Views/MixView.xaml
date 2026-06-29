@@ -3,18 +3,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="24">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <!-- Title + description -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
             <TextBlock Text="{DynamicResource Mix.Title}"
                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                       Margin="0,0,0,8"/>
+                       Margin="0,0,0,4"/>
             <TextBlock Text="{DynamicResource Mix.Description}"
                        Style="{StaticResource MaterialDesignBody2TextBlock}"
-                       Opacity="0.7" Margin="0,0,0,16" TextWrapping="Wrap"/>
+                       Opacity="0.7" TextWrapping="Wrap"/>
+        </StackPanel>
 
-            <!-- File list with order -->
-            <materialDesign:Card Padding="0" Margin="0,0,0,16">
+        <!-- File list + side action buttons -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <materialDesign:Card Grid.Column="0" Padding="0">
                 <DockPanel>
                     <ToolBar DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignToolBar}">
                         <Button Content="{DynamicResource Common.AddFiles}"
@@ -26,9 +40,10 @@
                     </ToolBar>
 
                     <DataGrid ItemsSource="{Binding Files}"
+                              SelectedItem="{Binding SelectedFile}"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
-                              MinHeight="160" MaxHeight="280"
+                              CanUserDeleteRows="False"
                               materialDesign:DataGridAssist.CellPadding="8 4"
                               AllowDrop="True"
                               PreviewDragOver="FileList_DragOver"
@@ -44,7 +59,7 @@
                                             <materialDesign:PackIcon Kind="FilePdfBox"
                                                                      Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                                      VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                            <StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding FileName}"/>
                                                 <TextBlock FontSize="11" Opacity="0.6">
                                                     <Run Text="{Binding PageCount, Mode=OneWay}"/>
@@ -56,34 +71,34 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="120">
+
+                            <!-- Order column: CheckBox — unchecked = straight, checked = reverse.
+                                 RadioButtons in DataGrid are unreliable (shared GroupName across rows);
+                                 CheckBox avoids the issue entirely. -->
+                            <DataGridTemplateColumn Width="160">
                                 <DataGridTemplateColumn.Header>
                                     <TextBlock Text="{DynamicResource Mix.Column.Order}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <RadioButton Content="{DynamicResource Mix.Straight}"
-                                                         IsChecked="{Binding Reverse, Converter={StaticResource InverseBoolConverter}}"
-                                                         Style="{StaticResource MaterialDesignRadioButton}"
-                                                         Margin="0,0,8,0" FontSize="11"/>
-                                            <RadioButton Content="{DynamicResource Mix.Reverse}"
-                                                         IsChecked="{Binding Reverse}"
-                                                         Style="{StaticResource MaterialDesignRadioButton}"
-                                                         FontSize="11"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="40">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Command="{Binding DataContext.RemoveFileCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                CommandParameter="{Binding}"
-                                                Width="28" Height="28">
-                                            <materialDesign:PackIcon Kind="Delete" Width="16" Height="16"/>
-                                        </Button>
+                                        <CheckBox IsChecked="{Binding Reverse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  Style="{StaticResource MaterialDesignCheckBox}"
+                                                  VerticalAlignment="Center">
+                                            <CheckBox.Content>
+                                                <TextBlock>
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Text" Value="{DynamicResource Mix.Straight}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Reverse}" Value="True">
+                                                                    <Setter Property="Text" Value="{DynamicResource Mix.Reverse}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </CheckBox.Content>
+                                        </CheckBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -92,29 +107,50 @@
                 </DockPanel>
             </materialDesign:Card>
 
-            <!-- Output -->
-            <materialDesign:Card Padding="16" Margin="0,0,0,16">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" Text="{Binding OutputPath}"
-                             materialDesign:HintAssist.Hint="{DynamicResource Common.OutputFile}"
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                             IsReadOnly="True" Margin="0,0,8,0"/>
-                    <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
-                            Command="{Binding BrowseOutputCommand}"
-                            Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
-                </Grid>
-            </materialDesign:Card>
+            <!-- Side action buttons: fixed position, operate on selected row -->
+            <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Top">
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding MoveUpCommand}"
+                        ToolTip="{DynamicResource Merge.MoveUp}">
+                    <materialDesign:PackIcon Kind="ArrowUp"/>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding MoveDownCommand}"
+                        ToolTip="{DynamicResource Merge.MoveDown}">
+                    <materialDesign:PackIcon Kind="ArrowDown"/>
+                </Button>
+                <Separator Margin="8,4"/>
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding RemoveFileCommand}"
+                        ToolTip="{DynamicResource Merge.Remove}">
+                    <materialDesign:PackIcon Kind="Delete"/>
+                </Button>
+            </StackPanel>
+        </Grid>
 
-            <Button Content="{DynamicResource Common.Run}"
-                    Command="{Binding RunCommand}"
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    HorizontalAlignment="Left" Padding="32,8"
-                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+        <!-- Output -->
+        <materialDesign:Card Grid.Row="2" Padding="16" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding OutputPath}"
+                         materialDesign:HintAssist.Hint="{DynamicResource Common.OutputFile}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         IsReadOnly="True" Margin="0,0,8,0"/>
+                <Button Grid.Column="1" Content="{DynamicResource Common.Browse}"
+                        Command="{Binding BrowseOutputCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
+            </Grid>
+        </materialDesign:Card>
 
-        </StackPanel>
-    </ScrollViewer>
+        <!-- Run button -->
+        <Button Grid.Row="3"
+                Content="{DynamicResource Common.Run}"
+                Command="{Binding RunCommand}"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                HorizontalAlignment="Left" Padding="32,8"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+    </Grid>
 </UserControl>

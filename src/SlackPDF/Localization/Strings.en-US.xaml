@@ -64,7 +64,7 @@
   <sys:String x:Key="Mix.Title">Mix PDF pages</sys:String>
   <sys:String x:Key="Mix.Straight">Straight order</sys:String>
   <sys:String x:Key="Mix.Reverse">Reverse order</sys:String>
-  <sys:String x:Key="Mix.Description">Interleave pages from two or more PDFs. Perfect for single-sided scans.</sys:String>
+  <sys:String x:Key="Mix.Description">Interleaves pages from multiple PDFs: page 1 from file A → page 1 from file B → page 2 from file A → page 2 from file B… Useful for combining odd and even pages from a two-pass single-sided scan. "Reverse order" flips the page sequence within a file before interleaving.</sys:String>
   <sys:String x:Key="Mix.Column.Order">Order</sys:String>
 
   <!-- Rotate -->

@@ -64,7 +64,7 @@
   <sys:String x:Key="Mix.Title">Чередование страниц</sys:String>
   <sys:String x:Key="Mix.Straight">Прямой порядок</sys:String>
   <sys:String x:Key="Mix.Reverse">Обратный порядок</sys:String>
-  <sys:String x:Key="Mix.Description">Чередует страницы из нескольких PDF. Идеально для односторонних сканов.</sys:String>
+  <sys:String x:Key="Mix.Description">Перемежает страницы из нескольких PDF: стр. 1 из файла A → стр. 1 из файла B → стр. 2 из файла A → стр. 2 из файла B… Используется для сшивания чётных и нечётных страниц при двухпроходном сканировании на одностороннем сканере. «Обратный порядок» — переворачивает последовательность страниц в файле перед чередованием.</sys:String>
   <sys:String x:Key="Mix.Column.Order">Порядок</sys:String>
 
   <!-- Поворот -->
