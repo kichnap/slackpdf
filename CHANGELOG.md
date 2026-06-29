@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-06-29
+
+### Added
+- Virtual PDF printer based on PSCRIPT5 Windows driver
+- `SlackPDF.PrintService` — Windows Service that watches the spool directory, converts PostScript to PDF via Ghostscript, and saves the result
+- `SlackPDF.PrinterInstaller` — CLI tool that installs/uninstalls the PSCRIPT5 driver, file-port monitor (clawmon), printer, and service; auto-downloads Ghostscript if not present
+- `SlackPDF.PrinterUI` — WPF settings window accessible from Printing Preferences (output folder, naming template, quality, conflict strategy)
+- `SlackPDF.PrinterShared` — shared library: `NextJobHint` IPC (JSON file at `%ProgramData%\SlackPDF\next_output.json` for passing output path and page dimensions), `PrinterSettings`
+- `SlackPDF.ppd` — PPD with full paper size list: A0–A6, Letter, Legal, Tabloid, and `*CustomPageSize` up to 14 400 pt
+- clawmon port monitor (C source + pre-compiled `bin/clawmon.dll`)
+- Landscape orientation fix: detects PSCRIPT5 encoding strategy (`IsPortrait`) and applies `/Rotate 90` via PDFsharp only when needed
+
 ## [1.0.0] - 2025-01-01
 
 ### Added

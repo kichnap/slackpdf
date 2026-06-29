@@ -24,6 +24,22 @@
 | **Extract** | Extract single pages or ranges into a new PDF |
 | **Insert** | Insert a PDF (or its pages) into another at any position or periodically |
 | **Visual Composer** ⭐ | Drag page thumbnails from multiple documents and arrange them freely into a new PDF |
+| **Virtual Printer** 🖨️ | Install SlackPDF as a system printer and print to PDF from any application |
+
+## Virtual Printer
+
+SlackPDF installs as a Windows virtual printer (PSCRIPT5-based). Once installed, it appears in the standard printer list and lets you save documents as PDF directly from Revit, AutoCAD, Word — any application that supports printing.
+
+**Features:**
+- Standard paper sizes A0–A6, Letter, Legal, Tabloid and custom sizes up to 5080×5080 mm
+- Correct landscape orientation handling — including elongated custom formats (A2×5, etc.)
+- Flexible settings: output folder, file naming template, PDF quality, conflict strategy
+- Windows background service — no open application required when printing
+- Optional "Save As" dialog
+
+**Installation:** run `SlackPDF-Setup-x.x.x.exe` — the installer sets up the driver, port monitor, background service, and settings UI automatically.
+
+> The virtual printer requires [Ghostscript](https://www.ghostscript.com/) (downloaded automatically on first install).
 
 ## Download
 
@@ -92,7 +108,7 @@ iscc installer/SlackPDF.iss
 # Or via full path:
 & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\SlackPDF.iss
 
-# Output: installer/Output/SlackPDF-Setup-1.0.0.exe
+# Output: installer/Output/SlackPDF-Setup-x.x.x.exe
 ```
 
 Or use the script that does publish + installer in one step:
@@ -119,6 +135,8 @@ All components are released under the MIT license, compatible with GPL v3.
 | [SkiaSharp](https://github.com/mono/SkiaSharp) | Graphics rendering | MIT |
 | [MaterialDesignThemes](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit) | UI components and theme | MIT |
 | [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) | MVVM infrastructure | MIT |
+| [Ghostscript.NET](https://github.com/jhabjan/Ghostscript.NET) | PostScript → PDF conversion (virtual printer) | LGPL v3 |
+| [Ghostscript](https://www.ghostscript.com/) | PostScript/PDF processing engine | AGPL v3 |
 
 ## Documentation
 

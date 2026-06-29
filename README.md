@@ -24,6 +24,22 @@
 | **Извлечь** | Извлечь отдельные страницы или диапазоны в новый PDF |
 | **Вставить** | Вставить один PDF внутрь другого в заданную позицию или с заданной периодичностью |
 | **Визуальный сборщик** ⭐ | Перетаскивай миниатюры страниц из нескольких документов и собирай новый PDF в произвольном порядке |
+| **Виртуальный принтер** 🖨️ | Установи SlackPDF как системный принтер и печатай в PDF из любой программы |
+
+## Виртуальный принтер
+
+SlackPDF устанавливается как виртуальный принтер Windows (на базе PSCRIPT5). После установки он появляется в стандартном списке принтеров и позволяет сохранять документы в PDF прямо из Revit, AutoCAD, Word — из любой программы с поддержкой печати.
+
+**Особенности:**
+- Поддержка стандартных форматов A0–A6, Letter, Legal, Tabloid и нестандартных размеров (до 5080×5080 мм)
+- Корректная обработка альбомной ориентации — в том числе нестандартных вытянутых форматов (A2×5 и т.п.)
+- Гибкая настройка: папка вывода, шаблон имени файла, качество PDF, стратегия при конфликте имён
+- Фоновый сервис Windows — не требует открытого приложения при печати
+- Диалог «Сохранить как» по желанию
+
+**Установка:** запусти `SlackPDF-Setup-x.x.x.exe` — инсталлятор сам установит драйвер, монитор портов, фоновый сервис и окно настроек.
+
+> Для работы виртуального принтера необходим [Ghostscript](https://www.ghostscript.com/) (скачивается автоматически при первой установке).
 
 ## Скачать
 
@@ -92,7 +108,7 @@ iscc installer/SlackPDF.iss
 # Или через полный путь:
 & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\SlackPDF.iss
 
-# Результат: installer/Output/SlackPDF-Setup-1.0.0.exe
+# Результат: installer/Output/SlackPDF-Setup-x.x.x.exe
 ```
 
 Либо используй скрипт, который делает publish + installer за один шаг:
@@ -127,6 +143,8 @@ PR и issues приветствуются! См. [CONTRIBUTING.md](docs/CONTRIBU
 | [SkiaSharp](https://github.com/mono/SkiaSharp) | Графический рендеринг | MIT |
 | [MaterialDesignThemes](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit) | UI-компоненты и тема | MIT |
 | [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) | MVVM-инфраструктура | MIT |
+| [Ghostscript.NET](https://github.com/jhabjan/Ghostscript.NET) | Конвертация PostScript → PDF (виртуальный принтер) | LGPL v3 |
+| [Ghostscript](https://www.ghostscript.com/) | Движок обработки PostScript/PDF | AGPL v3 |
 
 ## Лицензия
 
