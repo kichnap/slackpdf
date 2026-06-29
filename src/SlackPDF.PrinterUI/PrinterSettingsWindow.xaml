@@ -1,0 +1,157 @@
+<Window x:Class="SlackPDF.PrinterUI.PrinterSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:SlackPDF.PrinterUI"
+        xmlns:shared="clr-namespace:SlackPDF.PrinterShared;assembly=SlackPDF.PrinterShared"
+        Title="SlackPDF — Настройки принтера"
+        Width="520" SizeToContent="Height"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        TextElement.Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
+        Background="{DynamicResource MaterialDesign.Brush.Background}"
+        FontFamily="{md:MaterialDesignFont}">
+
+    <Window.DataContext>
+        <local:PrinterSettingsViewModel />
+    </Window.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24,20,24,20" MinWidth="460">
+
+            <!-- СОХРАНЕНИЕ -->
+            <TextBlock Text="СОХРАНЕНИЕ"
+                       Style="{StaticResource MaterialDesignOverlineTextBlock}"
+                       Margin="0,0,0,8"/>
+
+            <md:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <CheckBox Content="Показывать диалог «Сохранить как»"
+                              IsChecked="{Binding ShowSaveDialog}"
+                              Margin="0,0,0,12"/>
+
+                    <TextBlock Text="Папка по умолчанию:"
+                               Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                               Margin="0,0,0,4"/>
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right"
+                                Command="{Binding BrowseFolderCommand}"
+                                Content="Обзор…"
+                                Margin="8,0,0,0"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                        <TextBox Text="{Binding OutputFolder, UpdateSourceTrigger=PropertyChanged}"
+                                 md:HintAssist.Hint="Путь к папке"/>
+                    </DockPanel>
+                </StackPanel>
+            </md:Card>
+
+            <!-- ИМЯ ФАЙЛА -->
+            <TextBlock Text="ИМЯ ФАЙЛА"
+                       Style="{StaticResource MaterialDesignOverlineTextBlock}"
+                       Margin="0,0,0,8"/>
+
+            <md:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Шаблон:"
+                               Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                               Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding FileNameTemplate, UpdateSourceTrigger=PropertyChanged}"
+                             md:HintAssist.Hint="%[DocName]%"
+                             Margin="0,0,0,8"/>
+
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,8"
+                               Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                               Foreground="{DynamicResource MaterialDesign.Brush.ForegroundMid}"
+                               Text="%[DocName]%  %[AppName]%  %[Year]%  %[Month]%  %[Day]%  %[Hour]%  %[Minute]%  %[Second]%"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="Пример: "
+                                   Style="{StaticResource MaterialDesignCaptionTextBlock}"/>
+                        <TextBlock Text="{Binding FileNamePreview}"
+                                   Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                                   FontWeight="SemiBold"/>
+                    </StackPanel>
+
+                    <CheckBox Content="Удалять путь из имени документа"
+                              IsChecked="{Binding StripPathFromDocName}"/>
+                </StackPanel>
+            </md:Card>
+
+            <!-- ПРИ СОВПАДЕНИИ ИМЁН -->
+            <TextBlock Text="ПРИ СОВПАДЕНИИ ИМЁН"
+                       Style="{StaticResource MaterialDesignOverlineTextBlock}"
+                       Margin="0,0,0,8"/>
+
+            <md:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <RadioButton Content="Авто-нумерация (Договор_2.pdf, Договор_3.pdf…)"
+                                 IsChecked="{Binding ConflictStrategy,
+                                     Converter={x:Static local:EnumToBoolConverter.Instance},
+                                     ConverterParameter=AutoNumber}"
+                                 Margin="0,0,0,4"/>
+                    <RadioButton Content="Добавить дату и время"
+                                 IsChecked="{Binding ConflictStrategy,
+                                     Converter={x:Static local:EnumToBoolConverter.Instance},
+                                     ConverterParameter=AppendDateTime}"
+                                 Margin="0,0,0,4"/>
+                    <RadioButton Content="Перезаписать"
+                                 IsChecked="{Binding ConflictStrategy,
+                                     Converter={x:Static local:EnumToBoolConverter.Instance},
+                                     ConverterParameter=Overwrite}"
+                                 Margin="0,0,0,4"/>
+                    <RadioButton Content="Показать диалог «Сохранить как»"
+                                 IsChecked="{Binding ConflictStrategy,
+                                     Converter={x:Static local:EnumToBoolConverter.Instance},
+                                     ConverterParameter=ShowSaveDialog}"
+                                 Margin="0,0,0,4"/>
+                    <RadioButton Content="Пропустить"
+                                 IsChecked="{Binding ConflictStrategy,
+                                     Converter={x:Static local:EnumToBoolConverter.Instance},
+                                     ConverterParameter=Skip}"/>
+                </StackPanel>
+            </md:Card>
+
+            <!-- КАЧЕСТВО PDF -->
+            <TextBlock Text="КАЧЕСТВО PDF"
+                       Style="{StaticResource MaterialDesignOverlineTextBlock}"
+                       Margin="0,0,0,8"/>
+
+            <md:Card Padding="16" Margin="0,0,0,24">
+                <UniformGrid Columns="2">
+                    <RadioButton Content="Экран (72 dpi)"
+                                 IsChecked="{Binding Quality,
+                                     Converter={x:Static local:EnumToBoolConverter.Instance},
+                                     ConverterParameter=Screen}"
+                                 Margin="0,0,0,4"/>
+                    <RadioButton Content="Книга (150 dpi)"
+                                 IsChecked="{Binding Quality,
+                                     Converter={x:Static local:EnumToBoolConverter.Instance},
+                                     ConverterParameter=Ebook}"
+                                 Margin="0,0,0,4"/>
+                    <RadioButton Content="Высокое (300 dpi)"
+                                 IsChecked="{Binding Quality,
+                                     Converter={x:Static local:EnumToBoolConverter.Instance},
+                                     ConverterParameter=High}"
+                                 Margin="0,4,0,0"/>
+                    <RadioButton Content="Препресс (300 dpi + профили)"
+                                 IsChecked="{Binding Quality,
+                                     Converter={x:Static local:EnumToBoolConverter.Instance},
+                                     ConverterParameter=Prepress}"
+                                 Margin="0,4,0,0"/>
+                </UniformGrid>
+            </md:Card>
+
+            <!-- Кнопки -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Отмена"
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Margin="0,0,8,0"/>
+                <Button Content="Сохранить"
+                        Command="{Binding SaveCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"/>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+</Window>

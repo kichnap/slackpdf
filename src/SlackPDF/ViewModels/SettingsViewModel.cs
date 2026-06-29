@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using SlackPDF.Services;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 
 namespace SlackPDF.ViewModels;
 
@@ -21,6 +23,11 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private bool _postSaveOpenFolder;
     [ObservableProperty] private bool _postSaveOpenFile;
     [ObservableProperty] private string _statusMessage = string.Empty;
+
+    public string AppVersion { get; } =
+        Assembly.GetExecutingAssembly().GetName().Version is { } v
+            ? $"{v.Major}.{v.Minor}.{v.Build}"
+            : "—";
 
     public SettingsViewModel(SlackPDF.Core.PdfOperations ops, ThumbnailService thumbs)
     {
@@ -84,5 +91,17 @@ public partial class SettingsViewModel : ObservableObject
         {
             UseShellExecute = true
         });
+    }
+
+    [RelayCommand]
+    private void OpenPrinterSettings()
+    {
+        var uiPath = Path.Combine(AppContext.BaseDirectory, "printerui", "SlackPDF.PrinterUI.exe");
+        if (!File.Exists(uiPath))
+        {
+            StatusMessage = Localization.LocalizationManager.Get("Settings.VirtualPrinter.NotFound");
+            return;
+        }
+        Process.Start(new ProcessStartInfo(uiPath) { UseShellExecute = true });
     }
 }

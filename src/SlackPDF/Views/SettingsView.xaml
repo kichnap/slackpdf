@@ -80,6 +80,21 @@
                     </StackPanel>
                 </materialDesign:Card>
 
+                <!-- Virtual Printer -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource Settings.VirtualPrinter}"
+                                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,4"/>
+                        <TextBlock Text="{DynamicResource Settings.VirtualPrinter.Desc}"
+                                   Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                   Opacity="0.65" Margin="0,0,0,12" TextWrapping="Wrap"/>
+                        <Button Content="{DynamicResource Settings.VirtualPrinter.Open}"
+                                Command="{Binding OpenPrinterSettingsCommand}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
                 <!-- Thumbnail cache -->
                 <materialDesign:Card Padding="20" Margin="0,0,0,16">
                     <StackPanel>
@@ -105,8 +120,11 @@
                     <StackPanel>
                         <TextBlock Text="{DynamicResource Settings.About}"
                                    Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8"/>
-                        <TextBlock Text="{DynamicResource Settings.Version}"
-                                   Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" Margin="0,0,0,8"/>
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" Margin="0,0,0,8">
+                            <Run Text="{DynamicResource Settings.Version}"/>
+                            <Run Text="{Binding AppVersion, Mode=OneWay}"/>
+                            <Run Text="{DynamicResource Settings.VersionSuffix}"/>
+                        </TextBlock>
                         <TextBlock Text="kichnap"
                                    Style="{StaticResource MaterialDesignBody2TextBlock}"
                                    FontWeight="Medium" Margin="0,0,0,4"/>

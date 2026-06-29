@@ -30,3 +30,23 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: false
+
+  build-clawmon:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build clawmon.dll
+        run: |
+          msbuild src/clawmon/clawmon.vcxproj `
+            /p:Configuration=Release `
+            /p:Platform=x64
+
+      - name: Upload clawmon artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: clawmon-dll
+          path: bin/clawmon.dll

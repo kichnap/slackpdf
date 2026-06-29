@@ -2,5 +2,9 @@
   <Folder Name="/src/">
     <Project Path="src/SlackPDF.Tests/SlackPDF.Tests.csproj" />
     <Project Path="src/SlackPDF/SlackPDF.csproj" />
+    <Project Path="src/SlackPDF.PrinterShared/SlackPDF.PrinterShared.csproj" />
+    <Project Path="src/SlackPDF.PrintService/SlackPDF.PrintService.csproj" />
+    <Project Path="src/SlackPDF.PrinterUI/SlackPDF.PrinterUI.csproj" />
+    <Project Path="src/SlackPDF.PrinterInstaller/SlackPDF.PrinterInstaller.csproj" />
   </Folder>
 </Solution>

@@ -24,5 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SlackPDF\SlackPDF.csproj" />
+    <ProjectReference Include="..\SlackPDF.PrinterShared\SlackPDF.PrinterShared.csproj" />
+    <ProjectReference Include="..\SlackPDF.PrintService\SlackPDF.PrintService.csproj" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,108 @@
+*PPD-Adobe: "4.3"
+*FormatVersion: "4.3"
+*FileVersion: "1.0"
+*LanguageVersion: Russian
+*LanguageEncoding: ISOLatin1
+*PCFileName: "SLKPDF.PPD"
+*Product: "(SlackPDF)"
+*PSVersion: "(3017.102) 1"
+*ModelName: "SlackPDF"
+*NickName: "SlackPDF"
+*ShortNickName: "SlackPDF"
+*Manufacturer: "SlackPDF"
+
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*FileSystem: False
+*Throughput: "1"
+*LandscapeOrientation: Plus90
+*TTRasterizer: Type42
+*LanguageLevel: "3"
+*FreeVM: "4194304"
+*PrintPSErrors: False
+
+*DefaultResolution: 600dpi
+*Resolution 600dpi/600 dpi: "<</HWResolution [600 600]>> setpagedevice"
+
+*% -----------------------------------------------------------------------
+*% Custom page size — accepts any size the print server has registered.
+*% Revit sets DevMode to the specific paper size; PSCRIPT5 encodes it here.
+*% -----------------------------------------------------------------------
+*CustomPageSize True: "pop pop pop <</PageSize [5 -2 roll] /ImagingBBox null>> setpagedevice"
+*ParamCustomPageSize Width:       1 points 36 14400
+*ParamCustomPageSize Height:      2 points 36 14400
+*ParamCustomPageSize WidthOffset: 3 points 0 0
+*ParamCustomPageSize HeightOffset: 4 points 0 0
+*ParamCustomPageSize Orientation: 5 int 0 3
+*MaxMediaWidth:  "14400"
+*MaxMediaHeight: "14400"
+
+*% -----------------------------------------------------------------------
+*% Named paper sizes (portrait = short × long, in PostScript points).
+*% 1 mm = 2.83465 pt, values rounded to nearest integer.
+*% -----------------------------------------------------------------------
+
+*DefaultPageSize: A4
+
+*% ISO A-series
+*PageSize A6/A6:     "<</PageSize [ 298  420] /ImagingBBox null>> setpagedevice"
+*PageSize A5/A5:     "<</PageSize [ 420  595] /ImagingBBox null>> setpagedevice"
+*PageSize A4/A4:     "<</PageSize [ 595  842] /ImagingBBox null>> setpagedevice"
+*PageSize A3/A3:     "<</PageSize [ 842 1191] /ImagingBBox null>> setpagedevice"
+*PageSize A2/A2:     "<</PageSize [1191 1684] /ImagingBBox null>> setpagedevice"
+*PageSize A1/A1:     "<</PageSize [1684 2384] /ImagingBBox null>> setpagedevice"
+*PageSize A0/A0:     "<</PageSize [2384 3370] /ImagingBBox null>> setpagedevice"
+
+*% North American
+*PageSize Letter/Letter: "<</PageSize [612 792]  /ImagingBBox null>> setpagedevice"
+*PageSize Legal/Legal:   "<</PageSize [612 1008] /ImagingBBox null>> setpagedevice"
+*PageSize Tabloid/Tabloid: "<</PageSize [792 1224] /ImagingBBox null>> setpagedevice"
+
+*DefaultPageRegion: A4
+
+*PageRegion A6/A6:     "<</PageSize [ 298  420] /ImagingBBox null>> setpagedevice"
+*PageRegion A5/A5:     "<</PageSize [ 420  595] /ImagingBBox null>> setpagedevice"
+*PageRegion A4/A4:     "<</PageSize [ 595  842] /ImagingBBox null>> setpagedevice"
+*PageRegion A3/A3:     "<</PageSize [ 842 1191] /ImagingBBox null>> setpagedevice"
+*PageRegion A2/A2:     "<</PageSize [1191 1684] /ImagingBBox null>> setpagedevice"
+*PageRegion A1/A1:     "<</PageSize [1684 2384] /ImagingBBox null>> setpagedevice"
+*PageRegion A0/A0:     "<</PageSize [2384 3370] /ImagingBBox null>> setpagedevice"
+*PageRegion Letter/Letter: "<</PageSize [612 792]  /ImagingBBox null>> setpagedevice"
+*PageRegion Legal/Legal:   "<</PageSize [612 1008] /ImagingBBox null>> setpagedevice"
+*PageRegion Tabloid/Tabloid: "<</PageSize [792 1224] /ImagingBBox null>> setpagedevice"
+
+*DefaultImageableArea: A4
+
+*ImageableArea A6/A6:     "0 0  298  420"
+*ImageableArea A5/A5:     "0 0  420  595"
+*ImageableArea A4/A4:     "0 0  595  842"
+*ImageableArea A3/A3:     "0 0  842 1191"
+*ImageableArea A2/A2:     "0 0 1191 1684"
+*ImageableArea A1/A1:     "0 0 1684 2384"
+*ImageableArea A0/A0:     "0 0 2384 3370"
+*ImageableArea Letter/Letter: "0 0 612 792"
+*ImageableArea Legal/Legal:   "0 0 612 1008"
+*ImageableArea Tabloid/Tabloid: "0 0 792 1224"
+
+*DefaultPaperDimension: A4
+
+*PaperDimension A6/A6:     " 298  420"
+*PaperDimension A5/A5:     " 420  595"
+*PaperDimension A4/A4:     " 595  842"
+*PaperDimension A3/A3:     " 842 1191"
+*PaperDimension A2/A2:     "1191 1684"
+*PaperDimension A1/A1:     "1684 2384"
+*PaperDimension A0/A0:     "2384 3370"
+*PaperDimension Letter/Letter: "612 792"
+*PaperDimension Legal/Legal:   "612 1008"
+*PaperDimension Tabloid/Tabloid: "792 1224"
+
+*DefaultInputSlot: Auto
+*InputSlot Auto/Auto: ""
+
+*DefaultOutputBin: OnlyOne
+*DefaultOutputOrder: Normal
+*DefaultDuplex: None
+*Duplex None/None: "<<>> setpagedevice"
+
+*% End of SlackPDF.ppd

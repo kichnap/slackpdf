@@ -134,12 +134,43 @@
   <sys:String x:Key="Settings.About">О программе SlackPDF</sys:String>
   <sys:String x:Key="Settings.GitHub">GitHub — github.com/kichnap/slackpdf</sys:String>
   <sys:String x:Key="Settings.CacheCleared">Кэш миниатюр очищен.</sys:String>
-  <sys:String x:Key="Settings.Version">Версия 1.0.0 — GPL v3 — Бесплатно и открыто</sys:String>
+  <sys:String x:Key="Settings.Version">Версия </sys:String>
+  <sys:String x:Key="Settings.VersionSuffix"> — GPL v3 — Бесплатно и открыто</sys:String>
   <sys:String x:Key="Settings.OpenSource">Компоненты с открытым исходным кодом</sys:String>
   <sys:String x:Key="Settings.PostSave">После сохранения</sys:String>
   <sys:String x:Key="Settings.PostSave.Nothing">Ничего не делать</sys:String>
   <sys:String x:Key="Settings.PostSave.OpenFolder">Открыть папку с файлом</sys:String>
   <sys:String x:Key="Settings.PostSave.OpenFile">Открыть файл</sys:String>
   <sys:String x:Key="MainWindow.Engine">Движок:</sys:String>
+
+  <!-- Карточка в главных настройках -->
+  <sys:String x:Key="Settings.VirtualPrinter">Виртуальный принтер SlackPDF</sys:String>
+  <sys:String x:Key="Settings.VirtualPrinter.Desc">Настройте папку вывода, имя файла и качество PDF</sys:String>
+  <sys:String x:Key="Settings.VirtualPrinter.Open">Настройки принтера…</sys:String>
+  <sys:String x:Key="Settings.VirtualPrinter.NotFound">PrinterUI не найден</sys:String>
+
+  <!-- Виртуальный принтер -->
+  <sys:String x:Key="Printer.Settings.Title">SlackPDF — Настройки принтера</sys:String>
+  <sys:String x:Key="Printer.Save.Section">Сохранение</sys:String>
+  <sys:String x:Key="Printer.Save.ShowDialog">Показывать диалог «Сохранить как»</sys:String>
+  <sys:String x:Key="Printer.Save.DefaultFolder">Папка по умолчанию</sys:String>
+  <sys:String x:Key="Printer.Save.Browse">Обзор…</sys:String>
+  <sys:String x:Key="Printer.FileName.Section">Имя файла</sys:String>
+  <sys:String x:Key="Printer.FileName.Template">Шаблон</sys:String>
+  <sys:String x:Key="Printer.FileName.Preview">Пример</sys:String>
+  <sys:String x:Key="Printer.FileName.StripPath">Удалять путь из имени документа</sys:String>
+  <sys:String x:Key="Printer.Conflict.Section">Если файл уже существует</sys:String>
+  <sys:String x:Key="Printer.Conflict.AutoNumber">Авто-нумерация (Файл_2.pdf, Файл_3.pdf…)</sys:String>
+  <sys:String x:Key="Printer.Conflict.AppendDateTime">Добавить дату и время</sys:String>
+  <sys:String x:Key="Printer.Conflict.Overwrite">Перезаписать</sys:String>
+  <sys:String x:Key="Printer.Conflict.ShowDialog">Показать диалог «Сохранить как»</sys:String>
+  <sys:String x:Key="Printer.Conflict.Skip">Пропустить</sys:String>
+  <sys:String x:Key="Printer.Quality.Section">Качество PDF</sys:String>
+  <sys:String x:Key="Printer.Quality.Screen">Экран (72 dpi)</sys:String>
+  <sys:String x:Key="Printer.Quality.Ebook">Книга (150 dpi)</sys:String>
+  <sys:String x:Key="Printer.Quality.High">Высокое (300 dpi)</sys:String>
+  <sys:String x:Key="Printer.Quality.Prepress">Препресс (300 dpi + цветовые профили)</sys:String>
+  <sys:String x:Key="Printer.Tray.Processing">Конвертирую: {0}</sys:String>
+  <sys:String x:Key="Printer.Tray.Error">Ошибка SlackPDF</sys:String>
 
 </ResourceDictionary>

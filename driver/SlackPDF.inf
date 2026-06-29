@@ -1,0 +1,44 @@
+; SlackPDF.inf
+; INF-файл для виртуального PostScript-принтера SlackPDF.
+; Использует встроенный в Windows драйвер Microsoft PostScript (pscript5.dll).
+
+[Version]
+Signature="$Windows NT$"
+Class=Printer
+ClassGUID={4D36E979-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+CatalogFile=SlackPDF.cat
+DriverVer=06/28/2026,1.0.0.0
+PnpLockdown=1
+
+[Manufacturer]
+%ManufacturerName%=SlackPDF,NTamd64
+
+[SlackPDF.NTamd64]
+%PrinterName%=SlackPDF_Install,USBPRINT\SlackPDF,SlackPDF
+
+[SlackPDF_Install]
+CopyFiles=@SlackPDF.ppd
+DataSection=SlackPDF_Data
+DataFile=SlackPDF.ppd
+
+[SlackPDF_Data]
+DriverFile=pscript5.dll
+ConfigFile=ps5ui.dll
+HelpFile=pscript5.hlp
+UIFile=ps5ui.dll
+DataFile=SlackPDF.ppd
+
+[DestinationDirs]
+DefaultDestDir=66000
+
+[SourceDisksNames.amd64]
+1=%DiskName%,,,"."
+
+[SourceDisksFiles.amd64]
+SlackPDF.ppd=1
+
+[Strings]
+ManufacturerName="SlackPDF"
+PrinterName="SlackPDF PS"
+DiskName="SlackPDF Printer Driver"

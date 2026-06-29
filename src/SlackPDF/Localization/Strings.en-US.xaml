@@ -134,12 +134,43 @@
   <sys:String x:Key="Settings.About">About SlackPDF</sys:String>
   <sys:String x:Key="Settings.GitHub">GitHub — github.com/kichnap/slackpdf</sys:String>
   <sys:String x:Key="Settings.CacheCleared">Thumbnail cache cleared.</sys:String>
-  <sys:String x:Key="Settings.Version">Version 1.0.0 — GPL v3 — Free &amp; Open Source</sys:String>
+  <sys:String x:Key="Settings.Version">Version </sys:String>
+  <sys:String x:Key="Settings.VersionSuffix"> — GPL v3 — Free &amp; Open Source</sys:String>
   <sys:String x:Key="Settings.OpenSource">Open-source components</sys:String>
   <sys:String x:Key="Settings.PostSave">After saving</sys:String>
   <sys:String x:Key="Settings.PostSave.Nothing">Do nothing</sys:String>
   <sys:String x:Key="Settings.PostSave.OpenFolder">Open file location</sys:String>
   <sys:String x:Key="Settings.PostSave.OpenFile">Open the file</sys:String>
   <sys:String x:Key="MainWindow.Engine">Engine:</sys:String>
+
+  <!-- Card in main settings -->
+  <sys:String x:Key="Settings.VirtualPrinter">SlackPDF Virtual Printer</sys:String>
+  <sys:String x:Key="Settings.VirtualPrinter.Desc">Configure output folder, filename and PDF quality</sys:String>
+  <sys:String x:Key="Settings.VirtualPrinter.Open">Printer Settings…</sys:String>
+  <sys:String x:Key="Settings.VirtualPrinter.NotFound">PrinterUI not found</sys:String>
+
+  <!-- Virtual Printer -->
+  <sys:String x:Key="Printer.Settings.Title">SlackPDF Printer Settings</sys:String>
+  <sys:String x:Key="Printer.Save.Section">Output</sys:String>
+  <sys:String x:Key="Printer.Save.ShowDialog">Show Save As dialog</sys:String>
+  <sys:String x:Key="Printer.Save.DefaultFolder">Default output folder</sys:String>
+  <sys:String x:Key="Printer.Save.Browse">Browse…</sys:String>
+  <sys:String x:Key="Printer.FileName.Section">File name</sys:String>
+  <sys:String x:Key="Printer.FileName.Template">Template</sys:String>
+  <sys:String x:Key="Printer.FileName.Preview">Preview</sys:String>
+  <sys:String x:Key="Printer.FileName.StripPath">Remove path from document name</sys:String>
+  <sys:String x:Key="Printer.Conflict.Section">If file already exists</sys:String>
+  <sys:String x:Key="Printer.Conflict.AutoNumber">Auto-number (Doc_2.pdf, Doc_3.pdf…)</sys:String>
+  <sys:String x:Key="Printer.Conflict.AppendDateTime">Append date and time</sys:String>
+  <sys:String x:Key="Printer.Conflict.Overwrite">Overwrite</sys:String>
+  <sys:String x:Key="Printer.Conflict.ShowDialog">Show Save As dialog</sys:String>
+  <sys:String x:Key="Printer.Conflict.Skip">Skip</sys:String>
+  <sys:String x:Key="Printer.Quality.Section">PDF quality</sys:String>
+  <sys:String x:Key="Printer.Quality.Screen">Screen (72 dpi)</sys:String>
+  <sys:String x:Key="Printer.Quality.Ebook">E-book (150 dpi)</sys:String>
+  <sys:String x:Key="Printer.Quality.High">High (300 dpi)</sys:String>
+  <sys:String x:Key="Printer.Quality.Prepress">Prepress (300 dpi + color profiles)</sys:String>
+  <sys:String x:Key="Printer.Tray.Processing">Converting: {0}</sys:String>
+  <sys:String x:Key="Printer.Tray.Error">SlackPDF error</sys:String>
 
 </ResourceDictionary>

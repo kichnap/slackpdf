@@ -352,5 +352,10 @@ publish/
 installer/Output/
 *.user
 
+# Keep compiled clawmon artifact (needed for installer, no MSVC on CI agents)
+!bin/
+!bin/clawmon.dll
+
 # Local-only files (not for GitHub)
 SlackPDF_Project_Prompt.md
+SlackPDF_VirtualPrinter_Prompt.md
