@@ -19,8 +19,17 @@ jobs:
         with:
           dotnet-version: '9.x'
 
-      - name: Publish self-contained
+      - name: Publish main app
         run: dotnet publish src/SlackPDF/SlackPDF.csproj -c Release -o publish/
+
+      - name: Publish PrintService
+        run: dotnet publish src/SlackPDF.PrintService/SlackPDF.PrintService.csproj -c Release -o publish/service/
+
+      - name: Publish PrinterUI
+        run: dotnet publish src/SlackPDF.PrinterUI/SlackPDF.PrinterUI.csproj -c Release -o publish/printerui/
+
+      - name: Publish PrinterInstaller
+        run: dotnet publish src/SlackPDF.PrinterInstaller/SlackPDF.PrinterInstaller.csproj -c Release -o publish/installer/
 
       - name: Extract version (strip leading v)
         shell: pwsh
